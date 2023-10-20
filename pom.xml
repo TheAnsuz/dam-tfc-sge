@@ -28,9 +28,26 @@
             <artifactId>derby</artifactId>
             <version>10.14.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>
+                    res
+                </directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -48,6 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
                 <configuration>
                     <finalName>${project.artifactId}-${project.version}</finalName>
                     <archive>

@@ -38,7 +38,10 @@ Los objetivos se pueden esquematizar de la siguiente forma
 *Las tecnologías usadas para el desarrollo del proyecto serán mostradas en un futuro junto a documentación sobre su uso*    
 Estas tecnologías incluyen, entre otras
 * Git, como sistema de control de versiones
+* Github, como almacen de control de git
 * Java, como lenguaje de desarrollo
+* Maven, para gestionar y construir proyecto y dependencias
+* Swift, como herramienta de visualizacion de ventanas
 
 ## Temporalización 
 El proyecto se realizará mediante iteraciones, en las cuales se dedicará un tiempo a cada fase necesaria para la replanificacion, desarrollo y modificación y pruebas de las integraciones.
@@ -58,5 +61,11 @@ Debido a la naturaleza del proyecto y el requisito de ser un sistema ligero, el 
 
 *Se documentará tras la finalización del proyecto*
 
+- - -
 ## Bibliografía
-Sin datos
+#### Recursos
+* [Flaticon icons](https://www.flaticon.es/)
+
+#### Librerias
+* [Flatlaf look and feel](https://mvnrepository.com/artifact/com.formdev/flatlaf)
+* [Derby database](https://mvnrepository.com/artifact/org.apache.derby/derby)
