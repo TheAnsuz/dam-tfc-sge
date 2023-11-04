@@ -26,6 +26,7 @@ replay_pid*
 
 # Application instance data
 /database/
+/bbdd_test/
 /data/
 /logs/
 derby.log
