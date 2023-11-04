@@ -82,10 +82,14 @@ public final class SGE {
         FlatDarkLaf dark = new FlatDarkLaf();
 
         feelins.put(light.getName(), light.getClass().toString());
+        logger.debug("Registered laf {0} with index {1}", light.getName(), feelins.size());
+        
         feelins.put(dark.getName(), dark.getClass().toString());
-
+        logger.debug("Registered laf {0} with index {1}", dark.getName(), feelins.size());
+        
         for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
             feelins.put(laf.getName(), laf.getClassName());
+            logger.debug("Registered laf {0} with index {1}", laf.getName(), feelins.size());
         }
 
         logger.info("Found {0} look and feels", feelins.size());
@@ -99,7 +103,7 @@ public final class SGE {
                 logger.info("Setting app look and feel to \"{0}\"", lafName);
                 UIManager.setLookAndFeel(feelins.get(lafName));
             }
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (NullPointerException | UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             logger.error(ex);
         }
 

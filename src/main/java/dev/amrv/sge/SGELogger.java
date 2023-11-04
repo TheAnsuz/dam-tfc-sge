@@ -12,13 +12,16 @@ import java.time.format.DateTimeFormatter;
  */
 public class SGELogger {
 
+    
     public static final int LEVEL_ERROR = 0x1000000;
-    public static final int LEVEL_WARN = 0x100000;
-    public static final int LEVEL_INFO = 0x10000;
-    public static final int LEVEL_DEBUG = 0x1000;
-    public static final int LEVEL_CONFIG = 0x100;
-    public static final int LEVEL_ACTION = 0x10;
+    public static final int LEVEL_WARN =  0x0100000;
+    public static final int LEVEL_INFO =  0x0010000;
+    public static final int LEVEL_DEBUG = 0x0001000;
+    public static final int LEVEL_CONFIG =0x0000100;
+    public static final int LEVEL_ACTION =0x0000010;
 
+    public static int DEFAULT_LEVEL = LEVEL_ERROR | LEVEL_WARN | LEVEL_INFO | LEVEL_DEBUG;
+    
     private static final String ERROR = "ERROR";
     private static final String WARN = "WARN";
     private static final String INFO = "INFO";
@@ -29,7 +32,7 @@ public class SGELogger {
     private static final DateTimeFormatter LOG_FILE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy_hh-mm-ss");
     private final File folder;
     private PrintStream printer;
-    public int level = 0x000000;
+    public int level = DEFAULT_LEVEL;
 
     protected SGELogger(File logFolder) {
         this.folder = logFolder;
