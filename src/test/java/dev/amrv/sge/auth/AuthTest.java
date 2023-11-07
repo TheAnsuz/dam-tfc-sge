@@ -26,7 +26,7 @@ public class AuthTest {
 //        };
 
         System.out.println(credentials.getUsername());
-        System.out.println(credentials.getPassword());
+        System.out.println(credentials.getPasswordHash());
 
         credentials.loadPermissions();
         PermissionRoot perm = credentials.getPermissions();

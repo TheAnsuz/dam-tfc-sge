@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,10 +62,25 @@ public class PermissionsFile {
     }
 
     protected String compileString(String line) {
-        return line;
+        // Example cipher
+        String result = "";
+
+        int i = 0;
+
+        for (char c : line.toCharArray())
+            result += (c + (++i % 4));
+
+        return result;
     }
 
     protected String decompileString(String line) {
-        return line;
+        String result = "";
+
+        int i = 0;
+
+        for (char c : line.toCharArray())
+            result += (c - (++i % 4));
+
+        return result;
     }
 }

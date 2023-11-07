@@ -16,6 +16,9 @@ public final class PermissionRoot {
     }
 
     public boolean hasPermission(String permission) {
+        if (permission == null)
+            return true;
+
         Boolean val = permissions.get(permission);
 
         if (val != null)
@@ -40,6 +43,9 @@ public final class PermissionRoot {
     }
 
     public void setPermission(String permission, boolean value) {
+        if (permission == null)
+            return;
+
         permissions.put(permission.trim(), value);
     }
 

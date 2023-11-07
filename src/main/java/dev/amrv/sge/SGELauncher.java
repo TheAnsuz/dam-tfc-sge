@@ -1,14 +1,25 @@
 package dev.amrv.sge;
 
+import dev.amrv.sge.module.ConfigurationModule;
+import dev.amrv.sge.module.SellModule;
+import dev.amrv.sge.module.InventoryModule;
+import dev.amrv.sge.module.UsersModule;
+
 /**
  *
  * @author Adrian Martin Ruiz del Valle Aka. Ansuz
  */
 public class SGELauncher {
 
+    public static SGE instance;
+
     public static void main(String[] args) {
-        SGE system = new SGE();
-        system.start();
+        instance = new SGE();
+        instance.addModule(new ConfigurationModule());
+        instance.addModule(new UsersModule());
+        instance.addModule(new InventoryModule());
+        instance.addModule(new SellModule());
+        instance.start();
     }
 
 }
