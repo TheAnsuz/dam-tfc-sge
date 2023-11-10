@@ -52,8 +52,17 @@ public class PermissionsFile {
         content.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-            while (reader.ready())
-                content.add(decompileString(reader.readLine()));
+            String line;
+
+            do {
+                line = reader.readLine();
+
+                if (line == null)
+                    break;
+
+                content.add(decompileString(line));
+            } while (true);
+
         }
     }
 
@@ -68,7 +77,7 @@ public class PermissionsFile {
         int i = 0;
 
         for (char c : line.toCharArray())
-            result += (c + (++i % 4));
+            result += (char)(c + (++i % 4));
 
         return result;
     }
@@ -79,7 +88,7 @@ public class PermissionsFile {
         int i = 0;
 
         for (char c : line.toCharArray())
-            result += (c - (++i % 4));
+            result += (char)(c - (++i % 4));
 
         return result;
     }

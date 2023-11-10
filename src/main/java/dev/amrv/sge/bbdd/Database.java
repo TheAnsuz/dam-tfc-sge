@@ -1,10 +1,13 @@
 package dev.amrv.sge.bbdd;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.derby.jdbc.EmbeddedDriver;
 
 /**
@@ -38,20 +41,35 @@ public class Database {
         connection.rollback();
     }
 
-    public ResultSet execute(String sql) throws SQLException {
-        return connection.prepareCall(sql).executeQuery();
+    public PreparedStatement statement(String sql) throws SQLException {
+        return connection.prepareStatement(sql);
     }
 
-    public long executeUpdateSafe(String sql) {
+    public QueryResult execute(String sql, Object... params) throws SQLException {
+
+        for (int i = 0; i < params.length; i++) {
+            sql = sql.replace("{" + i + "}", params[i] == null ? "NULL" : params[i].toString());
+        }
+        
+        final Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        stmt.closeOnCompletion();
+
+        if (stmt.execute(sql, Statement.RETURN_GENERATED_KEYS))
+            return new QueryResult(QueryResult.TYPE_RESULT, stmt.getLargeUpdateCount(), stmt.getResultSet());
+        else
+            return new QueryResult(QueryResult.TYPE_COUNT, stmt.getLargeUpdateCount(), stmt.getGeneratedKeys());
+    }
+
+    public long executeUpdateSafe(String sql, Object... params) {
         try {
-            return executeUpdate(sql);
+            return executeUpdate(sql, params);
         } catch (SQLException ex) {
             return 0;
         }
     }
 
-    public long executeUpdate(String sql) throws SQLException {
-        return connection.prepareCall(sql).executeLargeUpdate();
+    public long executeUpdate(String sql, Object... params) throws SQLException {
+        return execute(sql, params).getCount();
     }
 
 }

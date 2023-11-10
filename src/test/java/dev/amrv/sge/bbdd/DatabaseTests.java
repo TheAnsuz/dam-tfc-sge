@@ -32,10 +32,9 @@ public class DatabaseTests {
         database.executeUpdate("INSERT INTO TEST.DATA VALUES (DEFAULT,'sample_name_2','sample_value_2')");
         database.commit();
 
-        ResultSet result = database.execute("SELECT * FROM TEST.DATA");
+        QueryResult result = database.execute("SELECT * FROM TEST.DATA");
 
-        while (result.next())
-            System.out.println(result.getString(2));
+        System.out.println(result);
 
         database.commit();
 

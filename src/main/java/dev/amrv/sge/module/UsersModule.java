@@ -15,7 +15,7 @@ public class UsersModule extends Module {
     private UsersPanel panel;
 
     @Override
-    public boolean load(SGE sge) {
+    public boolean onLoad(SGE sge) {
         panel = new UsersPanel(sge);
         return true;
     }
@@ -37,6 +37,10 @@ public class UsersModule extends Module {
     @Override
     public String requirePermission() {
         return null;
+    }
+
+    @Override
+    public void onAppear() {
     }
 
 }

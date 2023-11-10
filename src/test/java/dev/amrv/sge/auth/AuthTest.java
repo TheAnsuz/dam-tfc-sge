@@ -12,9 +12,10 @@ import javax.crypto.NoSuchPaddingException;
 public class AuthTest {
 
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException {
-        String username = "adrian";
-        String password = "clave";
-        UserCredentials credentials = UserCredentials.anonymous();
+        String username = "administrador";
+        String password = "administrador";
+
+        UserCredentials credentials = UserCredentials.createUser(username, password);
 
 //        UserCredentials credentials = new UserCredentials(username, password) {
 //            @Override
@@ -24,18 +25,16 @@ public class AuthTest {
 //            }
 //
 //        };
-
         System.out.println(credentials.getUsername());
         System.out.println(credentials.getPasswordHash());
 
-        credentials.loadPermissions();
+        //credentials.loadPermissions();
         PermissionRoot perm = credentials.getPermissions();
 
-        perm.setPermission("test.subperm.*", true);
-        perm.setPermission("test.subperm.explicit", false);
+        perm.setPermission("*", true);
 
         System.out.println(credentials.hasPermission("test.subperm.deeper"));
-        System.out.println(credentials.hasPermission("test."));
+        System.out.println(credentials.hasPermission("test"));
         System.out.println(credentials.hasPermission("test.subperm.explicit"));
 
         credentials.savePermissions();

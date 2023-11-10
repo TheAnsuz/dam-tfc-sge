@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.util.Enumeration;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
 
 /**
  *
@@ -80,19 +81,19 @@ public class SGEWindow extends javax.swing.JFrame {
         button.setFocusable(false);
 
         button.addActionListener(a -> {
-
-            panelModuleViewer.removeAll();
-
+            sge.setModuleOnDisplay(module);
             moduleButtons.clearSelection();
-            panelModuleViewer.add(module.getPanel());
-
-            panelModuleViewer.revalidate();
-            panelModuleViewer.repaint();
-            //this.pack();
         });
 
         button.setEnabled(sge.getUser().hasPermission(button.getModule().requirePermission()));
         panelModuleSelector.add(button, BorderLayout.CENTER);
+    }
+
+    public void setActivePanel(JPanel panel) {
+        panelModuleViewer.removeAll();
+        panelModuleViewer.add(panel);
+        panelModuleViewer.revalidate();
+        panelModuleViewer.repaint();
     }
 
     /**
@@ -108,6 +109,7 @@ public class SGEWindow extends javax.swing.JFrame {
         panelLeft = new javax.swing.JPanel();
         panelModuleSelector = new javax.swing.JPanel();
         panelRight = new javax.swing.JPanel();
+        panelModuleViewerScroll = new javax.swing.JScrollPane();
         panelModuleViewer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -117,6 +119,7 @@ public class SGEWindow extends javax.swing.JFrame {
             }
         });
 
+        jSplitPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
         jSplitPane1.setDividerLocation(240);
 
         panelModuleSelector.setLayout(new javax.swing.BoxLayout(panelModuleSelector, javax.swing.BoxLayout.Y_AXIS));
@@ -129,22 +132,23 @@ public class SGEWindow extends javax.swing.JFrame {
         );
         panelLeftLayout.setVerticalGroup(
             panelLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelModuleSelector, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+            .addComponent(panelModuleSelector, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(panelLeft);
 
         panelModuleViewer.setLayout(new java.awt.BorderLayout());
+        panelModuleViewerScroll.setViewportView(panelModuleViewer);
 
         javax.swing.GroupLayout panelRightLayout = new javax.swing.GroupLayout(panelRight);
         panelRight.setLayout(panelRightLayout);
         panelRightLayout.setHorizontalGroup(
             panelRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelModuleViewer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelModuleViewerScroll, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         panelRightLayout.setVerticalGroup(
             panelRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelModuleViewer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelModuleViewerScroll, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         jSplitPane1.setRightComponent(panelRight);
@@ -177,6 +181,7 @@ public class SGEWindow extends javax.swing.JFrame {
     private javax.swing.JPanel panelLeft;
     private javax.swing.JPanel panelModuleSelector;
     private javax.swing.JPanel panelModuleViewer;
+    private javax.swing.JScrollPane panelModuleViewerScroll;
     private javax.swing.JPanel panelRight;
     // End of variables declaration//GEN-END:variables
 }

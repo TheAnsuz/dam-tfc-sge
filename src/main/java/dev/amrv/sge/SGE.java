@@ -5,8 +5,10 @@ package dev.amrv.sge;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import dev.amrv.sge.auth.UserCredentials;
+import dev.amrv.sge.bbdd.Database;
 import dev.amrv.sge.event.EventSystem;
 import dev.amrv.sge.event.impl.SGEInitializeEvent;
+import dev.amrv.sge.event.impl.SGEModuleChange;
 import dev.amrv.sge.event.impl.SGESetupEvent;
 import dev.amrv.sge.event.impl.SGEUserChangeEvent;
 import dev.amrv.sge.io.PropertiesFile;
@@ -16,12 +18,10 @@ import dev.amrv.sge.window.SGEWindow;
 import dev.amrv.sge.window.UserCredentialsDialog;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -31,6 +31,8 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Adrian Martin Ruiz del Valle Aka. Ansuz
  */
 public final class SGE {
+
+    private final static String USER_LAST_NAME = "sge.user.last";
 
     private final List<Module> modules = new ArrayList<>();
 
@@ -46,6 +48,7 @@ public final class SGE {
     private final PropertiesFile properties;
     private UserCredentials userCredentials;
     private SGEWindow window;
+    private Database database;
 
     protected SGE() {
         this.threadGroup = new ThreadGroup("SGE");
@@ -85,12 +88,21 @@ public final class SGE {
         Runtime.getRuntime().addShutdownHook(shutdown);
         logger.info("Creating event system with {0} threads", 5);
         eventSystem = new EventSystem(this, 5);
+        eventSystem.start();
 
         try {
             logger.info("Loading properties {0}", properties.getFile().getPath());
             this.properties.read();
         } catch (IOException ex) {
             logger.error(ex);
+        }
+
+        logger.info("Initializating database...");
+        try {
+            database = new Database("bbdd");
+        } catch (SQLException ex) {
+            logger.error(ex);
+            System.exit(1);
         }
 
         logger.info("Initializating window...");
@@ -105,43 +117,43 @@ public final class SGE {
         logger.info("Setting up...");
 
         logger.info("Loading look and feels");
-        final Map<String, String> feelins = new HashMap<>();
         FlatLightLaf light = new FlatLightLaf();
         FlatDarkLaf dark = new FlatDarkLaf();
 
-        feelins.put(light.getName(), light.getClass().toString());
-        logger.debug("Registered laf {0} with index {1}", light.getName(), feelins.size());
-
-        feelins.put(dark.getName(), dark.getClass().toString());
-        logger.debug("Registered laf {0} with index {1}", dark.getName(), feelins.size());
-
-        for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-            feelins.put(laf.getName(), laf.getClassName());
-            logger.debug("Registered laf {0} with index {1}", laf.getName(), feelins.size());
-        }
-
-        logger.info("Found {0} look and feels", feelins.size());
+        UIManager.installLookAndFeel(light.getName(), light.getClass().getCanonicalName());
+        UIManager.installLookAndFeel(dark.getName(), dark.getClass().getCanonicalName());
 
         String lafName = properties.getProperty("sge.window.lookAndFeel");
-        try {
-            if (lafName == null) {
-                logger.info("No Look and feel found at window.lookAndFeel");
-                properties.setProperty("sge.window.lookAndFeel", UIManager.getLookAndFeel().getName());
-            } else {
-                logger.info("Setting app look and feel to \"{0}\"", lafName);
-                UIManager.setLookAndFeel(feelins.get(lafName));
+
+        LookAndFeelInfo toChange = null;
+        int index = 0;
+        for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+            logger.debug("Registered laf {0} with index {1}", laf.getName(), index);
+
+            if (lafName.equals(laf.getName()) || laf.getClassName().equals(lafName)) {
+                toChange = laf;
             }
-        } catch (NullPointerException | UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        }
+
+        logger.info("Found {0} look and feels", UIManager.getInstalledLookAndFeels().length);
+
+        try {
+            setLookAndFeel(toChange);
+        } catch (Exception ex) {
             logger.error(ex);
         }
 
         getEventSystem().queueEvent(new SGESetupEvent(this));
         logger.info("Finished setting up");
 
+        String lastUsername = properties.getProperty(USER_LAST_NAME, "");
+
         int attempts = 1;
+
         while (true) {
             logger.info("Logging attempt {0}", attempts);
             UserCredentialsDialog dialog = new UserCredentialsDialog(null);
+            dialog.setUsername(lastUsername);
             dialog.setVisible(true);
 
             if (dialog.wasCanceled()) {
@@ -153,6 +165,7 @@ public final class SGE {
             UserCredentials credentials = dialog.generateCredentials();
 
             if (credentials.isValid()) {
+                userCredentials = null;
                 setUser(credentials);
                 break;
             } else {
@@ -161,16 +174,43 @@ public final class SGE {
             }
         }
 
-        logger.info("Loading modules...");
+        logger.info(
+                "Loading modules...");
         for (Module module : modules) {
             logger.info("Loading module: " + module.getName());
-            module.load(this);
-            window.addModule(module);
+            if (module.load(this)) {
+                window.addModule(module);
+            } else {
+                logger.error("There was an error loading module {0}", module.getName());
+            }
         }
 
         logger.info("Opening UI");
+
         window.setTitle(getUser().getUsername());
-        window.setVisible(true);
+        window.setVisible(
+                true);
+    }
+
+    public void setLookAndFeel(LookAndFeelInfo info) throws Exception {
+        try {
+            UIManager.setLookAndFeel(info.getClassName());
+            properties.setProperty("sge.window.lookAndFeel", info.getName());
+
+            SwingUtilities.updateComponentTreeUI(window);
+
+            for (Module module : modules)
+                if (module.isLoaded()) {
+                    SwingUtilities.updateComponentTreeUI(module.getPanel());
+                }
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            throw new Exception(ex);
+        }
+    }
+
+    public Database getDatabase() {
+        return database;
     }
 
     public synchronized void setUser(UserCredentials credentials) {
@@ -192,7 +232,17 @@ public final class SGE {
 
         logger.info("Changed user to {0}", credentials.getUsername());
         this.userCredentials = credentials;
+        properties.setProperty(USER_LAST_NAME, credentials.getUsername());
         getEventSystem().queueEvent(new SGEUserChangeEvent(userCredentials, credentials));
+    }
+
+    private Module displayModule;
+
+    public synchronized void setModuleOnDisplay(Module module) {
+        getEventSystem().queueEvent(new SGEModuleChange(displayModule, module));
+        displayModule = module;
+        window.setActivePanel(module.getPanel());
+        module.onAppear();
     }
 
     public UserCredentials getUser() {

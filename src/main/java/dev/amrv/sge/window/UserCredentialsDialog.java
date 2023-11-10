@@ -4,6 +4,7 @@ import dev.amrv.sge.auth.UserCredentials;
 import dev.amrv.sge.io.ImageLoader;
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.EventQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JRootPane;
@@ -28,6 +29,7 @@ public class UserCredentialsDialog extends JDialog {
     }
 
     private boolean canceled = true;
+    private boolean keepUser = false;
 
     public boolean wasCanceled() {
         return canceled;
@@ -36,6 +38,12 @@ public class UserCredentialsDialog extends JDialog {
     public UserCredentialsDialog(Component parent) {
         super.setModal(true);
         initComponents();
+        super.setLocationRelativeTo(parent);
+    }
+
+    public void setUsername(String username) {
+        jTextField1.setText(username);
+        keepUser = !username.trim().isEmpty();
     }
 
     private boolean passwordVisible = false;
@@ -123,13 +131,18 @@ public class UserCredentialsDialog extends JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
     @Override
     public void setVisible(boolean b) {
-        jTextField1.setText("");
-        jPasswordField1.setText("");
         setPasswordVisible(false);
-        super.setLocationRelativeTo(null);
+
+        if (keepUser)
+            jTextField1.setFocusable(false);
+
         super.setVisible(b);
+
+        jTextField1.setFocusable(true);
+        keepUser = false;
     }
 
     public UserCredentials generateCredentials() {

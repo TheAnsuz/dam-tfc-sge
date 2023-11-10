@@ -18,6 +18,9 @@ public class ExceptionDialog extends javax.swing.JDialog {
      * Creates new form ExceptionDialog
      */
     public ExceptionDialog(Component parent, String title, String message, Throwable exception) {
+        super.setModal(true);
+        initComponents();
+
         super.setTitle(title);
         textMessage.setText(message);
 
@@ -28,9 +31,7 @@ public class ExceptionDialog extends javax.swing.JDialog {
 
         SwingUtilities.getRootPane(buttonAccept).setDefaultButton(buttonAccept);
 
-        initComponents();
         if (parent != null) {
-            super.setModal(true);
             super.setLocationRelativeTo(parent);
         }
     }
@@ -53,8 +54,14 @@ public class ExceptionDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         textMessage.setText(" ");
+        textMessage.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         buttonAccept.setText("Aceptar");
+        buttonAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAcceptActionPerformed(evt);
+            }
+        });
 
         textError.setColumns(20);
         textError.setLineWrap(true);
@@ -77,7 +84,7 @@ public class ExceptionDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 646, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(buttonAccept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -92,7 +99,7 @@ public class ExceptionDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(textMessage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonAccept)
@@ -107,6 +114,10 @@ public class ExceptionDialog extends javax.swing.JDialog {
         final StringSelection content = new StringSelection(textError.getText());
         getToolkit().getSystemClipboard().setContents(content, content);
     }//GEN-LAST:event_buttonCopyActionPerformed
+
+    private void buttonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAcceptActionPerformed
+        super.setVisible(false);
+    }//GEN-LAST:event_buttonAcceptActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAccept;

@@ -46,7 +46,7 @@ public class EventSystem {
     public void clearQueue() {
         pool.getStack().clear();
     }
-    
+
     public void stop() {
         for (EventThread thread : threads) {
             try {
@@ -68,4 +68,5 @@ public class EventSystem {
     public void queueEvent(Event event) {
         pool.queue(event);
     }
+
 }

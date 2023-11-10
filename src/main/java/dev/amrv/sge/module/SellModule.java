@@ -16,7 +16,7 @@ public class SellModule extends Module {
     private JPanel panel;
 
     @Override
-    public boolean load(SGE sge) {
+    public boolean onLoad(SGE sge) {
         panel = new JPanel();
         panel.setName(NAME);
         panel.setBackground(Color.blue);
@@ -41,6 +41,10 @@ public class SellModule extends Module {
     @Override
     public String requirePermission() {
         return "sell.see";
+    }
+
+    @Override
+    public void onAppear() {
     }
 
 }

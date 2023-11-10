@@ -12,8 +12,10 @@ import java.util.Set;
 public class InventoryAttributes {
 
     private final Map<String, String> map = new HashMap<>();
+    private final int id;
 
-    public InventoryAttributes() {
+    public InventoryAttributes(int id) {
+        this.id = id;
     }
 
     public void remove(String key) {

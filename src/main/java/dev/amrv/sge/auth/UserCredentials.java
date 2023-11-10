@@ -55,11 +55,11 @@ public final class UserCredentials {
 
     private UserCredentials(String username, String password, PermissionRoot permissions) {
         this.username = username;
-        System.out.println("USER: " + username + " -- " + password);
+//        System.out.println("USER: " + username + " -- " + password);
         this.password = callDigest(password);
         this.permissions = permissions == null ? new PermissionRoot() : permissions;
         this.file = new PermissionsFile(SGEFileSystem.getSourceFile("user", getFilename()));
-        System.out.println("FILE: " + this.file.getFile().getName());
+//        System.out.println("FILE: " + this.file.getFile().getName());
     }
 
     protected String getFilename() {

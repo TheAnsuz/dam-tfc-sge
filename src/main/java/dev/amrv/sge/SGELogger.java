@@ -3,6 +3,8 @@ package dev.amrv.sge;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,16 +14,15 @@ import java.time.format.DateTimeFormatter;
  */
 public class SGELogger {
 
-    
     public static final int LEVEL_ERROR = 0x1000000;
-    public static final int LEVEL_WARN =  0x0100000;
-    public static final int LEVEL_INFO =  0x0010000;
+    public static final int LEVEL_WARN = 0x0100000;
+    public static final int LEVEL_INFO = 0x0010000;
     public static final int LEVEL_DEBUG = 0x0001000;
-    public static final int LEVEL_CONFIG =0x0000100;
-    public static final int LEVEL_ACTION =0x0000010;
+    public static final int LEVEL_CONFIG = 0x0000100;
+    public static final int LEVEL_ACTION = 0x0000010;
 
     public static int DEFAULT_LEVEL = LEVEL_ERROR | LEVEL_WARN | LEVEL_INFO | LEVEL_DEBUG;
-    
+
     private static final String ERROR = "ERROR";
     private static final String WARN = "WARN";
     private static final String INFO = "INFO";
@@ -69,7 +70,7 @@ public class SGELogger {
     public void error(Throwable exception) {
         if (!isEnabled(LEVEL_ERROR))
             return;
-        writeLog(format(ERROR, exception.toString(), new Object[0]));
+        writeLog(format(ERROR, parseException(exception), new Object[0]));
     }
 
     public void error(String message, Object... params) {
@@ -81,7 +82,7 @@ public class SGELogger {
     public void warn(Throwable exception) {
         if (!isEnabled(LEVEL_WARN))
             return;
-        writeLog(format(WARN, exception.toString(), new Object[0]));
+        writeLog(format(WARN, parseException(exception), new Object[0]));
     }
 
     public void warn(String message, Object... params) {
@@ -93,7 +94,7 @@ public class SGELogger {
     public void info(Throwable exception) {
         if (!isEnabled(LEVEL_INFO))
             return;
-        writeLog(format(INFO, exception.toString(), new Object[0]));
+        writeLog(format(INFO, parseException(exception), new Object[0]));
     }
 
     public void info(String message, Object... params) {
@@ -105,7 +106,7 @@ public class SGELogger {
     public void debug(Throwable exception) {
         if (!isEnabled(LEVEL_DEBUG))
             return;
-        writeLog(format(DEBUG, exception.toString(), new Object[0]));
+        writeLog(format(DEBUG, parseException(exception), new Object[0]));
     }
 
     public void debug(String message, Object... params) {
@@ -117,7 +118,7 @@ public class SGELogger {
     public void config(Throwable exception) {
         if (!isEnabled(LEVEL_CONFIG))
             return;
-        writeLog(format(CONFIG, exception.toString(), new Object[0]));
+        writeLog(format(CONFIG, parseException(exception), new Object[0]));
     }
 
     public void config(String message, Object... params) {
@@ -148,9 +149,17 @@ public class SGELogger {
             int index = message.indexOf("{" + i + "}", 0);
 
             if (index == 0 || message.charAt(index - 1) != '\\')
-                message.replace(index, index + 3, params[i].toString());
+                message.replace(index, index + 3, params[i] instanceof Throwable ? parseException((Throwable) params[i]) : params[i].toString());
 
         }
+    }
+
+    protected String parseException(Throwable throwable) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        throwable.printStackTrace(pw);
+
+        return sw.toString();
     }
 
     protected String getTimestamp() {

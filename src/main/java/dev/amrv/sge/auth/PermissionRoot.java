@@ -29,8 +29,9 @@ public final class PermissionRoot {
         do {
             index = result.lastIndexOf('.');
 
-            if (index == -1)
-                break;
+            if (index == -1) {
+                return permissions.getOrDefault("*", Boolean.FALSE);
+            }
 
             result = permission.substring(0, index);
 

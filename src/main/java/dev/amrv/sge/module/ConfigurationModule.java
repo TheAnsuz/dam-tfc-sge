@@ -1,6 +1,7 @@
 package dev.amrv.sge.module;
 
 import dev.amrv.sge.SGE;
+import dev.amrv.sge.module.configuration.ConfigurationPanel;
 import javax.swing.JPanel;
 
 /**
@@ -11,11 +12,11 @@ public class ConfigurationModule extends Module {
 
     public static final String NAME = "Configuration";
 
-    private JPanel panel;
+    private ConfigurationPanel panel;
 
     @Override
-    public boolean load(SGE sge) {
-        panel = new JPanel();
+    public boolean onLoad(SGE sge) {
+        panel = new ConfigurationPanel(sge);
 
         return true;
     }
@@ -37,6 +38,11 @@ public class ConfigurationModule extends Module {
     @Override
     public String requirePermission() {
         return "configuration.see";
+    }
+
+    @Override
+    public void onAppear() {
+        panel.updateConfigFields();
     }
 
 }

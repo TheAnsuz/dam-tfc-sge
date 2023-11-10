@@ -9,26 +9,41 @@ import javax.swing.SwingUtilities;
  *
  * @author Adrian Martin Ruiz del Valle Aka. Ansuz
  */
-public class ErrorDialog extends javax.swing.JDialog {
+public class ConfirmDialog extends javax.swing.JDialog {
+
+    private boolean accepted = false;
 
     /**
-     * Creates new form ErrorDialog
+     * Creates new form ConfirmDialog
      *
      * @param parent
-     * @param title
-     * @param message
+     * @param defaultAccept
      */
-    public ErrorDialog(Component parent, String title, String message) {
+    public ConfirmDialog(Component parent, String title, String message, boolean defaultAccept) {
         initComponents();
-        super.setModal(true);
+        setModal(true);
+
         super.setTitle(title);
-        initComponents();
         labelMessage.setText(message);
+
         super.pack();
-        SwingUtilities.getRootPane(buttonAccept).setDefaultButton(buttonAccept);
-        super.setLocationRelativeTo(parent);
+
+        if (parent != null) {
+            this.setLocationRelativeTo(parent);
+        }
+
+        if (defaultAccept)
+            SwingUtilities.getRootPane(buttonAccept).setDefaultButton(buttonAccept);
+        else
+            SwingUtilities.getRootPane(buttonCancel).setDefaultButton(buttonCancel);
+
+        accepted = defaultAccept;
     }
 
+    public boolean wasAccepted() {
+        return accepted;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,10 +55,9 @@ public class ErrorDialog extends javax.swing.JDialog {
 
         labelMessage = new javax.swing.JLabel();
         buttonAccept = new javax.swing.JButton();
+        buttonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
-        setType(java.awt.Window.Type.POPUP);
 
         labelMessage.setText(" ");
         labelMessage.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -52,6 +66,13 @@ public class ErrorDialog extends javax.swing.JDialog {
         buttonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonAcceptActionPerformed(evt);
+            }
+        });
+
+        buttonCancel.setText("Cancelar");
+        buttonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCancelActionPerformed(evt);
             }
         });
 
@@ -65,27 +86,35 @@ public class ErrorDialog extends javax.swing.JDialog {
                     .addComponent(labelMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(buttonAccept)
-                        .addGap(0, 316, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonCancel)
+                        .addGap(0, 234, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelMessage)
+                .addComponent(labelMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonAccept)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonAccept)
+                    .addComponent(buttonCancel))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAcceptActionPerformed
-        super.setVisible(false);
+        accepted = true;
     }//GEN-LAST:event_buttonAcceptActionPerformed
 
+    private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
+        accepted = false;
+    }//GEN-LAST:event_buttonCancelActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAccept;
+    private javax.swing.JButton buttonCancel;
     private javax.swing.JLabel labelMessage;
     // End of variables declaration//GEN-END:variables
 }
