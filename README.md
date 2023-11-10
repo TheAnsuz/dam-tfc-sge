@@ -42,6 +42,7 @@ Estas tecnologías incluyen, entre otras
 * Java, como lenguaje de desarrollo
 * Maven, para gestionar y construir proyecto y dependencias
 * Swift, como herramienta de visualizacion de ventanas
+* Derby, como base de datos mySQL
 
 ## Temporalización 
 El proyecto se realizará mediante iteraciones, en las cuales se dedicará un tiempo a cada fase necesaria para la replanificacion, desarrollo y modificación y pruebas de las integraciones.
