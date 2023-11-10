@@ -32,3 +32,6 @@ replay_pid*
 /logs/
 /user/
 derby.log
+
+# IDE
+.dist/
