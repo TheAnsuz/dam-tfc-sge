@@ -2,7 +2,6 @@ package dev.amrv.sge.module.providers;
 
 import dev.amrv.sge.bbdd.Database;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,12 +10,23 @@ import java.util.Map;
  */
 public class ProviderBuilder {
 
-    public String reference = null;
+    // Datos identificadores
     public String name = null;
     public String cif = null;
+    public String reference = null;
+
+    // Datos contacto
     public String mail = null;
     public String phone = null;
+    public String phone2 = null;
 
+    // Datos localizacion
+    public String address = null;
+    public String postalCode = null;
+    public String location = null;
+    public String province = null;
+
+    // Datos internos
     private int id = -1;
 
     public ProviderBuilder() {
@@ -29,14 +39,32 @@ public class ProviderBuilder {
 
         ProviderAttribute attr;
 
-        attr = attributes.get("MAIL");
-        this.mail = attr == null ? null : attr.getValue();
-
+        // Datos identificadores
         attr = attributes.get("REFERENCE");
         this.reference = attr == null ? null : attr.getValue();
 
+        // Datos de contacto
+        attr = attributes.get("MAIL");
+        this.mail = attr == null ? null : attr.getValue();
+
         attr = attributes.get("PHONE");
         this.phone = attr == null ? null : attr.getValue();
+
+        attr = attributes.get("PHONE2");
+        this.phone2 = attr == null ? null : attr.getValue();
+
+        // Datos de ubicacion
+        attr = attributes.get("ADDRESS");
+        this.address = attr == null ? null : attr.getValue();
+
+        attr = attributes.get("POSTAL_CODE");
+        this.postalCode = attr == null ? null : attr.getValue();
+
+        attr = attributes.get("LOCATION");
+        this.location = attr == null ? null : attr.getValue();
+
+        attr = attributes.get("PROVINCE");
+        this.province = attr == null ? null : attr.getValue();
 
     }
 
@@ -56,6 +84,8 @@ public class ProviderBuilder {
 
         if (exists()) {
             provider = Provider.get(database, id);
+            provider.setName(name);
+            provider.commit(database);
         } else {
             provider = Provider.create(database, name, cif);
             id = provider.getID();
@@ -75,6 +105,21 @@ public class ProviderBuilder {
 
         if (phone != null && !phone.trim().isEmpty())
             attributes.put("PHONE", ProviderAttribute.create(database, id, "PHONE", phone));
+
+        if (phone2 != null && !phone2.trim().isEmpty())
+            attributes.put("PHONE2", ProviderAttribute.create(database, id, "PHONE2", phone2));
+
+        if (address != null && !address.trim().isEmpty())
+            attributes.put("ADDRESS", ProviderAttribute.create(database, id, "ADDRESS", address));
+
+        if (postalCode != null && !postalCode.trim().isEmpty())
+            attributes.put("POSTAL_CODE", ProviderAttribute.create(database, id, "POSTAL_CODE", postalCode));
+
+        if (location != null && !location.trim().isEmpty())
+            attributes.put("LOCATION", ProviderAttribute.create(database, id, "LOCATION", location));
+
+        if (province != null && !province.trim().isEmpty())
+            attributes.put("PHONE", ProviderAttribute.create(database, id, "PROVINCE", province));
 
         return attributes;
     }

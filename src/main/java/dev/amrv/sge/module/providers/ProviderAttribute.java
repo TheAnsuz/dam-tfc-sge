@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -160,6 +161,28 @@ public class ProviderAttribute {
         database.commit();
 
         id = -1;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + this.id;
+        hash = 61 * hash + this.providerId;
+        hash = 61 * hash + Objects.hashCode(this.key);
+        hash = 61 * hash + Objects.hashCode(this.value);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ProviderAttribute other = (ProviderAttribute) obj;
+        return this.id == other.id;
     }
 
 }

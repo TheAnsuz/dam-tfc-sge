@@ -45,10 +45,17 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
     public void setProvider(ProviderBuilder builder) {
         providerBuilder = builder;
         fieldProviderName.setText(builder.name);
-        fieldProviderReference.setText(builder.reference);
         fieldProviderCif.setText(builder.cif);
+        fieldProviderReference.setText(builder.reference);
+
         fieldProviderMail.setText(builder.mail);
         fieldProviderPhone.setText(builder.phone);
+        fieldProviderPhone2.setText(builder.phone2);
+
+        fieldProviderAddress.setText(builder.address);
+        fieldProviderPostalCode.setText(builder.postalCode);
+        fieldProviderLocation.setText(builder.location);
+        fieldProviderProvince.setText(builder.province);
 
         fieldProviderCif.setEnabled(!builder.exists());
         buttonUpdate.setText(builder.exists() ? BUTTON_MODIFY_EXISTING : BUTTON_MODIFY_NEW);
@@ -85,6 +92,16 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
         fieldProviderPhone = new javax.swing.JTextField();
         fieldProviderMail = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
+        fieldProviderAddress = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        fieldProviderPostalCode = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        fieldProviderLocation = new javax.swing.JTextField();
+        fieldProviderProvince = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        fieldProviderPhone2 = new javax.swing.JTextField();
 
         menuUpdateTable.setText("Actualizar");
 
@@ -133,7 +150,7 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
             panelProviderSeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelProviderSeeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonUpdateTable, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -165,6 +182,14 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
 
         jLabel4.setText("Correo");
 
+        jLabel5.setText("Direccion");
+
+        jLabel6.setText("Codigo postal");
+
+        jLabel7.setText("Localidad");
+
+        jLabel8.setText("Provincia");
+
         javax.swing.GroupLayout panelProviderModifyLayout = new javax.swing.GroupLayout(panelProviderModify);
         panelProviderModify.setLayout(panelProviderModifyLayout);
         panelProviderModifyLayout.setHorizontalGroup(
@@ -172,31 +197,52 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
             .addGroup(panelProviderModifyLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(panelProviderModifyLayout.createSequentialGroup()
-                            .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel1)
-                                .addComponent(fieldProviderName)
-                                .addComponent(jLabel2)
-                                .addComponent(fieldProviderReference, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(fieldProviderCif, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3)))
-                        .addGroup(panelProviderModifyLayout.createSequentialGroup()
-                            .addComponent(buttonUpdate)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(buttonReset))
-                        .addComponent(jSeparator1))
+                    .addComponent(jSeparator2)
                     .addGroup(panelProviderModifyLayout.createSequentialGroup()
                         .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fieldProviderPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelPhone))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(fieldProviderMail, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(114, Short.MAX_VALUE))
+                            .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(panelProviderModifyLayout.createSequentialGroup()
+                                    .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel1)
+                                        .addComponent(fieldProviderName)
+                                        .addComponent(jLabel2)
+                                        .addComponent(fieldProviderReference, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(fieldProviderCif, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel3)))
+                                .addGroup(panelProviderModifyLayout.createSequentialGroup()
+                                    .addComponent(buttonUpdate)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(buttonReset))
+                                .addComponent(jSeparator1))
+                            .addGroup(panelProviderModifyLayout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(220, 220, 220)
+                                .addComponent(jLabel6))
+                            .addGroup(panelProviderModifyLayout.createSequentialGroup()
+                                .addComponent(fieldProviderAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fieldProviderPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelProviderModifyLayout.createSequentialGroup()
+                                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(fieldProviderLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(fieldProviderProvince, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelProviderModifyLayout.createSequentialGroup()
+                                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(fieldProviderPhone2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                                    .addComponent(fieldProviderPhone, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelPhone, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(fieldProviderMail, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 108, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panelProviderModifyLayout.setVerticalGroup(
             panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,11 +269,31 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
                 .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldProviderPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fieldProviderMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldProviderPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fieldProviderAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fieldProviderPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fieldProviderLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fieldProviderProvince, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                 .addGroup(panelProviderModifyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonUpdate)
                     .addComponent(buttonReset))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Crear/Modificar", panelProviderModify);
@@ -248,8 +314,15 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
         providerBuilder.name = fieldProviderName.getText().trim();
         providerBuilder.reference = fieldProviderReference.getText().trim();
         providerBuilder.cif = fieldProviderCif.getText().trim();
+
         providerBuilder.phone = fieldProviderPhone.getText().trim();
+        providerBuilder.phone2 = fieldProviderPhone2.getText().trim();
         providerBuilder.mail = fieldProviderMail.getText().trim();
+
+        providerBuilder.address = fieldProviderAddress.getText().trim();
+        providerBuilder.postalCode = fieldProviderPostalCode.getText().trim();
+        providerBuilder.location = fieldProviderLocation.getText().trim();
+        providerBuilder.province = fieldProviderProvince.getText().trim();
 
         if (providerBuilder.isInvalid()) {
             SGENotifier.displayError(this, "Error", "La informacion no es valida");
@@ -333,17 +406,27 @@ public class ProvidersPanel extends javax.swing.JPanel implements PopupMenuListe
     private javax.swing.JButton buttonReset;
     private javax.swing.JButton buttonUpdate;
     private javax.swing.JButton buttonUpdateTable;
+    private javax.swing.JTextField fieldProviderAddress;
     private javax.swing.JTextField fieldProviderCif;
+    private javax.swing.JTextField fieldProviderLocation;
     private javax.swing.JTextField fieldProviderMail;
     private javax.swing.JTextField fieldProviderName;
     private javax.swing.JTextField fieldProviderPhone;
+    private javax.swing.JTextField fieldProviderPhone2;
+    private javax.swing.JTextField fieldProviderPostalCode;
+    private javax.swing.JTextField fieldProviderProvince;
     private javax.swing.JTextField fieldProviderReference;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private final javax.swing.JTable jTable1 = new javax.swing.JTable();
     private javax.swing.JLabel labelPhone;

@@ -57,6 +57,14 @@ public final class ProviderTableModel extends AbstractTableModel {
     public synchronized void addProvider(Provider provider, Map<String, ProviderAttribute> attributes) {
         int index = rows.size();
 
+        for (int i = 0; i < rows.size(); i++) {
+            if (provider.getID() == rows.get(i).getID()) {
+                removeProvider(i);
+                index = i;
+                break;
+            }
+        }
+
         rows.add(index, provider);
         rowAttributes.add(index, attributes);
 

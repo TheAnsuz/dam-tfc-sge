@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -29,9 +30,9 @@ public class Provider {
 
         return providers;
     }
-    
+
     public static Provider get(Database database, int id) throws SQLException {
-        final Provider provider = new Provider(-1, null, null);
+        final Provider provider = new Provider(id, null, null);
         provider.rollback(database);
         return provider;
     }
@@ -80,12 +81,10 @@ public class Provider {
     }
 
     private void update(Database database) throws SQLException {
-        database.execute("UPDATE PROVIDER SET"
-                + "CIF = {1},"
-                + "NAME = '{2}'"
+        database.execute("UPDATE PROVIDER "
+                + "SET NAME = '{1}'"
                 + "WHERE ID = {0}",
                 id,
-                cif,
                 name
         );
 
@@ -130,4 +129,26 @@ public class Provider {
         database.commit();
         id = -1;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + this.id;
+        hash = 79 * hash + Objects.hashCode(this.name);
+        hash = 79 * hash + Objects.hashCode(this.cif);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Provider other = (Provider) obj;
+        return this.id == other.id;
+    }
+
 }
