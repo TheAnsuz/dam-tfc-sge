@@ -5,6 +5,9 @@ package dev.amrv.sge.module.inventory;
 import dev.amrv.sge.SGE;
 import dev.amrv.sge.window.SGENotifier;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
@@ -18,12 +21,10 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
 
     private final InventoryTreeModel treeModel;
     private final SGE sge;
-    private final InventoryUtils utils;
     private final JPopupMenu popup;
 
-    public InventoryPanel(SGE sge, InventoryUtils utils) {
+    public InventoryPanel(SGE sge) {
         this.sge = sge;
-        this.utils = utils;
         initComponents();
         treeModel = new InventoryTreeModel(sge, jTree1);
         //jTree1.setCellRenderer(new InventoryTreeRenderer(treeModel));
@@ -38,6 +39,7 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         menu.add(menuCreateCategory);
         menu.add(menuCreateProduct);
         menu.addSeparator();
+        menu.add(menuModify);
         menu.add(menuDelete);
         menu.addSeparator();
         menu.add(menuUpdate);
@@ -75,6 +77,7 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         menuCreateProduct = new javax.swing.JMenuItem();
         menuDelete = new javax.swing.JMenuItem();
         menuUpdate = new javax.swing.JMenuItem();
+        menuModify = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
 
@@ -86,6 +89,11 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         });
 
         menuCreateProduct.setText("Crear producto");
+        menuCreateProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCreateProductActionPerformed(evt);
+            }
+        });
 
         menuDelete.setText("Eliminar");
         menuDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -98,6 +106,13 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         menuUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuUpdateActionPerformed(evt);
+            }
+        });
+
+        menuModify.setText("Modificar");
+        menuModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuModifyActionPerformed(evt);
             }
         });
 
@@ -121,24 +136,29 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuCreateCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCreateCategoryActionPerformed
-        if (treeModel.getPopupItem() == null)
-            return;
+        InventoryCategory parent = null;
 
-        final InventoryTreeNode node = treeModel.getPopupItem();
+        if (treeModel.getPopupItem() != null) {
 
-        if (!node.isCategory())
-            return;
+            final InventoryTreeNode node = treeModel.getPopupItem();
 
-        final InventoryCategory parent = node.getAsCategory();
+            if (node.isCategory())
+                parent = node.getAsCategory();
+        }
+
         try {
             InventoryCategory created = InventoryCategory.create(sge.getDatabase(), JOptionPane.showInputDialog(this, "Nombre de categoria"), parent);
 
             treeModel.add(treeModel.getPopupItem(), new InventoryTreeNode(created));
+
+            if (parent == null)
+                treeModel.reload();
+
         } catch (SQLException ex) {
-            SGENotifier.displayError(this, "Error", "Could not create category", ex);
+            SGENotifier.displayError(this, "Error", "No se puede crear la categoria", ex);
             sge.logger.error(ex);
         }
-        
+
         treeModel.clearPopupItem();
     }//GEN-LAST:event_menuCreateCategoryActionPerformed
 
@@ -182,6 +202,78 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         treeModel.clearPopupItem();
     }//GEN-LAST:event_menuDeleteActionPerformed
 
+    private void menuCreateProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCreateProductActionPerformed
+        if (treeModel.getPopupItem() == null)
+            return;
+
+        final InventoryTreeNode node = treeModel.getPopupItem();
+
+        if (!node.isCategory())
+            return;
+
+        final InventoryCategory parent = node.getAsCategory();
+        try {
+
+            CreateProductWindow createProductWindow = new CreateProductWindow(sge, this);
+            createProductWindow.displayCategory(parent);
+            createProductWindow.updateProviders();
+            createProductWindow.setVisible(true);
+
+            InventoryProduct product = createProductWindow.getCreatedProduct();
+            Collection<InventoryAttribute> attributes = InventoryAttribute.getAll(sge.getDatabase(), product).values();
+
+            treeModel.add(node, new InventoryTreeNode(product, attributes));
+
+            treeModel.reload(node);
+
+        } catch (SQLException ex) {
+            SGENotifier.displayError(this, "Error", "No se ha podido intentar crear el producto", ex);
+            sge.logger.error(ex);
+        }
+
+        treeModel.clearPopupItem();
+    }//GEN-LAST:event_menuCreateProductActionPerformed
+
+    private void menuModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuModifyActionPerformed
+        final InventoryTreeNode node = treeModel.getPopupItem();
+
+        if (node == null)
+            return;
+
+        if (node.isCategory()) {
+            InventoryCategory category = node.getAsCategory();
+
+            category.setName(JOptionPane.showInputDialog(this, "Modificar " + category.getName()));
+            try {
+                category.commit(sge.getDatabase());
+            } catch (SQLException ex) {
+                SGENotifier.displayError(this, "Error", "No se ha podido modificar la categoria", ex);
+                sge.logger.error(ex);
+            }
+            treeModel.reload(node);
+        } else {
+            InventoryProduct product = node.getAsProduct();
+
+            CreateProductWindow createProductWindow = new CreateProductWindow(sge, this);
+            try {
+                createProductWindow.displayProduct(product);
+                createProductWindow.updateProviders();
+            } catch (SQLException ex) {
+                SGENotifier.displayError(this, "Error", "No se ha podido modificar el producto", ex);
+                sge.logger.error(ex);
+            }
+            createProductWindow.setVisible(true);
+
+            try {
+                node.reload(sge.getDatabase());
+            } catch (SQLException ex) {
+                sge.logger.error(ex);
+            }
+
+            treeModel.reload(node.getParent());
+        }
+    }//GEN-LAST:event_menuModifyActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
@@ -189,6 +281,7 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
     private javax.swing.JMenuItem menuCreateCategory;
     private javax.swing.JMenuItem menuCreateProduct;
     private javax.swing.JMenuItem menuDelete;
+    private javax.swing.JMenuItem menuModify;
     private javax.swing.JMenuItem menuUpdate;
     // End of variables declaration//GEN-END:variables
 
@@ -200,16 +293,19 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
             menuCreateProduct.setEnabled(false);
             menuCreateCategory.setEnabled(true);
             menuDelete.setEnabled(false);
+            menuModify.setEnabled(false);
 
         } else if (node.isCategory()) {
             menuCreateCategory.setEnabled(true);
             menuCreateProduct.setEnabled(true);
             menuDelete.setEnabled(node.getChildCount() == 0);
+            menuModify.setEnabled(true);
 
         } else {
             menuCreateProduct.setEnabled(false);
             menuCreateCategory.setEnabled(false);
             menuDelete.setEnabled(true);
+            menuModify.setEnabled(true);
         }
     }
 

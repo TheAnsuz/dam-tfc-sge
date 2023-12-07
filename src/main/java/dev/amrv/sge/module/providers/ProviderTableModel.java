@@ -91,6 +91,13 @@ public final class ProviderTableModel extends AbstractTableModel {
         return rows.get(index);
     }
 
+    public void setProviderAt(int index, Provider provider, Map<String, ProviderAttribute> attributes) {
+        rows.add(index, provider);
+        rowAttributes.add(index, attributes);
+
+        fireTableRowsInserted(index, index);
+    }
+
     public Map<String, ProviderAttribute> getAttributesAt(int index) {
         return rowAttributes.get(index);
     }

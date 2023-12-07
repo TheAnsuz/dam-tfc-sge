@@ -2,6 +2,7 @@ package dev.amrv.sge.module.inventory;
 
 import dev.amrv.sge.bbdd.Database;
 import dev.amrv.sge.bbdd.QueryResult;
+import dev.amrv.sge.module.providers.Provider;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,17 +15,21 @@ import java.util.Objects;
  */
 public class InventoryProduct implements Comparable<InventoryProduct> {
 
-    private static final String QUERY_CREATE_PRODUCT = "INSERT INTO INVENTORY.PRODUCT (CATEGORY, NAME) VALUES ("
+    private static final String QUERY_CREATE_PRODUCT = "INSERT INTO INVENTORY.PRODUCT (CATEGORY, NAME, PROVIDER, AMOUNT) VALUES ("
             + "{0},"
-            + "'{1}'"
+            + "'{1}',"
+            + "{2},"
+            + "{3}"
             + ")";
-    private static final String QUERY_MODIFY_PRODUCT = "UPDATE INVENTORY.PRODUCT SET"
-            + "CATEGORY = {1},"
-            + "NAME = '{2}'"
+    private static final String QUERY_MODIFY_PRODUCT = "UPDATE INVENTORY.PRODUCT SET "
+            + "CATEGORY = {1}, "
+            + "NAME = '{2}', "
+            + "PROVIDER = {3}, "
+            + "AMOUNT = {4}"
             + "WHERE ID = {0}";
     private static final String QUERY_GET_PRODUCT = "SELECT * FROM INVENTORY.PRODUCT WHERE "
             + "ID = {0}";
-    private static final String QUERY_CHECK_EXISTS = "SELECT COUNT(ID) FROM INVENTORY.PRODUCT WHERE"
+    private static final String QUERY_CHECK_EXISTS = "SELECT COUNT(ID) FROM INVENTORY.PRODUCT WHERE "
             + "ID = {0}";
     private static final String QUERY_DELETE_PRODUCT = "DELETE FROM INVENTORY.PRODUCT WHERE ID = {0}";
     private static final String QUERY_GET_PRODUCTS_IN_CATEGORY = "SELECT * FROM INVENTORY.PRODUCT WHERE "
@@ -40,62 +45,68 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
         List<InventoryProduct> products = new ArrayList<>();
 
         while (set.next()) {
-            products.add(new InventoryProduct(set.getInt(1), set.getString(4), categoryid));
+            products.add(new InventoryProduct(set.getInt(1), set.getString(3), set.getInt(5), categoryid, set.getInt(4)));
         }
 
         return products;
     }
 
-    public static InventoryProduct getOrCreate(Database database, int id, String name, InventoryCategory category) throws SQLException {
-        return getOrCreate(database, id, name, category.getID());
+    public static InventoryProduct getOrCreate(Database database, int id, String name, InventoryCategory category, Provider provider, int amount) throws SQLException {
+        return getOrCreate(database, id, name, amount, category.getID(), provider.getID());
     }
 
-    public static InventoryProduct getOrCreate(Database database, int id, String name, int categoryId) throws SQLException {
+    public static InventoryProduct getOrCreate(Database database, int id, String name, int categoryId, int providerId, int amount) throws SQLException {
         if (database.execute(QUERY_CHECK_EXISTS, id).getCount() > 0) {
             // exists
             return get(database, id);
         } else {
             // does not exists
-            return create(database, name, categoryId);
+            return create(database, name, amount, categoryId, providerId);
         }
     }
 
     public static InventoryProduct get(Database database, int id) throws SQLException {
-        InventoryProduct product = new InventoryProduct(id, null, -1);
+        InventoryProduct product = new InventoryProduct(id, null, 0, -1, -1);
         product.get(database);
         return product;
     }
 
-    public static InventoryProduct create(Database database, String name, InventoryCategory category) throws SQLException {
-        return create(database, name, category.getID());
+    public static InventoryProduct create(Database database, String name, InventoryCategory category, Provider provider, int amount) throws SQLException {
+        return create(database, name, amount, category.getID(), provider.getID());
     }
 
-    public static InventoryProduct create(Database database, String name, int categoryId) throws SQLException {
+    public static InventoryProduct create(Database database, String name, int categoryId, int providerId, int amount) throws SQLException {
         final ResultSet set = database.execute(
                 QUERY_CREATE_PRODUCT,
                 categoryId,
-                name
+                name,
+                providerId,
+                amount
         ).getSet();
 
-        return new InventoryProduct(set.getInt(1), set.getString(4), set.getInt(2));
+        return new InventoryProduct(set.getInt(1), set.getString(3), set.getInt(5), set.getInt(2), set.getInt(4));
     }
 
-    public static InventoryProduct createLocal(String name, InventoryCategory category) {
-        return new InventoryProduct(-1, name, category.getID());
+    public static InventoryProduct createLocal(String name, InventoryCategory category, Provider provider, int amount) {
+        return new InventoryProduct(-1, name, amount, category.getID(), provider.getID());
     }
 
-    public static InventoryProduct createLocal(String name, int categoryId) {
-        return new InventoryProduct(-1, name, categoryId);
+    public static InventoryProduct createLocal(String name, int categoryId, int providerId, int amount) {
+        return new InventoryProduct(-1, name, amount, categoryId, providerId);
     }
 
     private String name;
+    private int providerId;
     private int categoryId;
+    private int amount;
     private int id;
 
-    private InventoryProduct(int id, String name, int categoryId) {
+    private InventoryProduct(int id, String name, int amount, int categoryId, int providerId) {
         this.id = id;
         this.name = name;
         this.categoryId = categoryId;
+        this.providerId = providerId;
+        this.amount = amount;
     }
 
     public boolean isLocal() {
@@ -120,6 +131,26 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
 
     public void setCategoryID(int id) {
         this.categoryId = id;
+    }
+
+    public int getProviderID() {
+        return providerId;
+    }
+
+    public void setProviderID(int providerId) {
+        this.providerId = providerId;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public void ChangeAmount(int amount) {
+        this.amount += amount;
     }
 
     public void rollback(Database database) throws SQLException {
@@ -151,7 +182,9 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
                 QUERY_MODIFY_PRODUCT,
                 id,
                 categoryId,
-                name
+                name,
+                providerId,
+                amount
         );
         database.commit();
     }
@@ -160,7 +193,9 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
         QueryResult result = database.execute(
                 QUERY_CREATE_PRODUCT,
                 categoryId,
-                name
+                name,
+                providerId,
+                amount
         );
         result.getSet().next();
         database.commit();
@@ -177,8 +212,10 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
         set.next();
         database.commit();
 
-        name = set.getString(4);
+        name = set.getString(3);
         categoryId = set.getInt(2);
+        providerId = set.getInt(4);
+        amount = set.getInt(5);
     }
 
     @Override
@@ -201,6 +238,7 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
         hash = 31 * hash + Objects.hashCode(this.name);
         hash = 31 * hash + this.categoryId;
         hash = 31 * hash + this.id;
+        hash = 31 * hash + this.providerId;
         return hash;
     }
 

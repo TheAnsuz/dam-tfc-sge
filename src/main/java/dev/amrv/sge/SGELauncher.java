@@ -17,12 +17,12 @@ public class SGELauncher {
 
     public static void main(String[] args) {
         instance = new SGE();
-        instance.addModule(new DatabaseModule());
-        instance.addModule(new ConfigurationModule());
         instance.addModule(new UsersModule());
+        instance.addModule(new ConfigurationModule());
+        instance.addModule(new ProvidersModule());
+        instance.addModule(new DatabaseModule());
         instance.addModule(new InventoryModule());
         instance.addModule(new SellModule());
-        instance.addModule(new ProvidersModule());
         instance.start();
     }
 

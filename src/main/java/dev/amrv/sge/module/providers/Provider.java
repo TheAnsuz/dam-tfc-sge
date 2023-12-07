@@ -151,4 +151,9 @@ public class Provider {
         return this.id == other.id;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

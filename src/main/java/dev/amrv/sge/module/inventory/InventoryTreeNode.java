@@ -2,6 +2,7 @@ package dev.amrv.sge.module.inventory;
 
 import dev.amrv.sge.bbdd.Database;
 import java.sql.SQLException;
+import java.util.Collection;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -12,14 +13,37 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
 
     private final boolean isCategory;
 
-    public InventoryTreeNode(InventoryProduct product) {
+    private String attributeString;
+
+    public InventoryTreeNode(InventoryProduct product, Collection<InventoryAttribute> attributes) {
         super(product, false);
+        buildAttributes(attributes);
         isCategory = false;
     }
 
     public InventoryTreeNode(InventoryCategory category) {
         super(category, true);
         isCategory = true;
+    }
+
+    public final void buildAttributes(Collection<InventoryAttribute> attributes) {
+        final StringBuilder builder = new StringBuilder();
+
+        if (attributes.isEmpty()) {
+            attributeString = "";
+            return;
+        }
+
+        builder.append("(");
+        for (InventoryAttribute attribute : attributes)
+            builder.append(attribute.getKey()).append(" ").append(attribute.getValue()).append(", ");
+
+        if (builder.lastIndexOf(",") > -1)
+            builder.deleteCharAt(builder.length() - 1).deleteCharAt(builder.length() - 1);
+
+        builder.append(")");
+
+        attributeString = builder.toString();
     }
 
     public boolean isCategory() {
@@ -34,14 +58,6 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
         return (InventoryProduct) getUserObject();
     }
 
-    @Override
-    public String toString() {
-        if (isCategory())
-            return getAsCategory().getName();
-        else
-            return getAsProduct().getName();
-    }
-
     public void reload(Database database) throws SQLException {
         if (isCategory) {
             reloadCategories(database);
@@ -49,6 +65,7 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
             reloadProducts(database);
         } else {
             getAsProduct().rollback(database);
+            buildAttributes(InventoryAttribute.getAll(database, getAsProduct()).values());
             super.setUserObject(getAsProduct());
         }
     }
@@ -73,7 +90,7 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
     }
 
     private void reloadProducts(Database database) throws SQLException {
-        category:
+        product:
         for (InventoryProduct product : InventoryProduct.getProductsInCategory(database, getAsCategory())) {
 
             InventoryTreeNode node;
@@ -84,10 +101,10 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
                     break;
 
                 if (node.getAsCategory().getID() == product.getID())
-                    break category;
+                    break product;
             }
 
-            super.add(new InventoryTreeNode(product));
+            super.add(new InventoryTreeNode(product, InventoryAttribute.getAll(database, product).values()));
         }
     }
 
@@ -111,5 +128,15 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
             return Integer.compare(this.getAsCategory().getID(), o.getAsCategory().getID());
         }
         return Integer.compare(this.getAsProduct().getID(), o.getAsProduct().getID());
+    }
+
+    @Override
+    public String toString() {
+        if (isCategory())
+            return getAsCategory().getName();
+        else {
+            InventoryProduct product = getAsProduct();
+            return product.getName() + " [" + product.getAmount() + "] " + attributeString;
+        }
     }
 }

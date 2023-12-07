@@ -19,9 +19,9 @@ public class InventoryCategory implements Comparable<InventoryCategory> {
             + "{0},"
             + "'{1}'"
             + ")";
-    private static final String QUERY_MODIFY_CATEGORY = "UPDATE INVENTORY.CATEGORY SET"
-            + "PARENT = {1},"
-            + "NAME = '{2}'"
+    private static final String QUERY_MODIFY_CATEGORY = "UPDATE INVENTORY.CATEGORY SET "
+            + "PARENT = {1}, "
+            + "NAME = '{2}' "
             + "WHERE ID = {0}";
 
     private static final String QUERY_DELETE_CATEGORY = "DELETE FROM INVENTORY.CATEGORY WHERE ID = {0}";

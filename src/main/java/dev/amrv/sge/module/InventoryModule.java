@@ -3,9 +3,12 @@ package dev.amrv.sge.module;
 import dev.amrv.sge.SGE;
 import dev.amrv.sge.bbdd.Database;
 import dev.amrv.sge.bbdd.DatabaseErrors;
+import dev.amrv.sge.module.inventory.InventoryCategory;
 import dev.amrv.sge.module.inventory.InventoryPanel;
-import dev.amrv.sge.module.inventory.InventoryUtils;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
@@ -19,14 +22,12 @@ public class InventoryModule extends Module {
     private InventoryPanel panel;
     private SGE sge;
     private Database database;
-    private InventoryUtils utils;
 
     @Override
     public boolean onLoad(SGE sge) {
         this.sge = sge;
-        utils = new InventoryUtils(this);
         this.database = sge.getDatabase();
-        panel = new InventoryPanel(sge, utils);
+        panel = new InventoryPanel(sge);
         panel.setName(NAME);
 
         // Esquema
@@ -64,7 +65,9 @@ public class InventoryModule extends Module {
             database.executeUpdate("CREATE TABLE INVENTORY.PRODUCT ("
                     + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
                     + "CATEGORY INT REFERENCES INVENTORY.CATEGORY(ID) NOT NULL,"
-                    + "NAME VARCHAR(64) NOT NULL"
+                    + "NAME VARCHAR(64) NOT NULL,"
+                    + "PROVIDER INT REFERENCES PROVIDER(ID) NOT NULL,"
+                    + "AMOUNT INT NOT NULL"
                     + ")");
             database.commit();
         } catch (SQLException ex) {
@@ -78,16 +81,16 @@ public class InventoryModule extends Module {
 
         // Tabla de atributos
         try {
-            database.executeUpdate("CREATE TABLE INVENTORY.ATTRIBUTE ("
+            database.executeUpdate("CREATE TABLE INVENTORY.PRODUCT_ATTRIBUTE ("
                     + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
-                    + "PRODUCT INT REFERENCES INVENTORY.PRODUCT(ID) NOT NULL,"
+                    + "PRODUCT INT NOT NULL CONSTRAINT PRODUCT_FK REFERENCES INVENTORY.PRODUCT(ID) ON DELETE CASCADE,"
                     + "NAME VARCHAR(24) NOT NULL,"
                     + "VALUE VARCHAR(48)"
                     + ")");
             database.commit();
         } catch (SQLException ex) {
             if (DatabaseErrors.alreadyExists(ex)) {
-                sge.logger.info("Table INVENTORY.ATTRIBUTE already exists");
+                sge.logger.info("Table INVENTORY.PRODUCT_ATTRIBUTE already exists");
             } else {
                 sge.logger.error(ex);
                 return false;

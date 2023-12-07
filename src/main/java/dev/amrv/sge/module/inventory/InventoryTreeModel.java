@@ -12,6 +12,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -60,6 +61,10 @@ public final class InventoryTreeModel implements TreeSelectionListener, MouseLis
         facade.reload();
     }
 
+    public synchronized void reload(TreeNode node) {
+        facade.reload(node);
+    }
+    
     public synchronized void reload(InventoryTreeNode node) {
         facade.reload(node);
     }
