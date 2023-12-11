@@ -8,8 +8,6 @@ import dev.amrv.sge.event.impl.SGEUserChangeEvent;
 import dev.amrv.sge.window.SGENotifier;
 import dev.amrv.sge.window.UserCredentialsDialog;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -86,11 +84,6 @@ public class UsersPanel extends javax.swing.JPanel {
         });
 
         jButton2.setText("Cambiar usuario");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -166,28 +159,29 @@ public class UsersPanel extends javax.swing.JPanel {
         if (password.trim().isEmpty())
             password = passwordConfirm;
 
-        try {
-            if (!UserCredentials.changeUsername(sge, username, password, passwordConfirm)) {
-                fieldPassword.setText("");
-                SGENotifier.displayError(this, "Error", "Password is not correct");
-            }
-        } catch (IOException ex) {
-            SGENotifier.displayError(this, "Error", "Error changing user", ex);
-            sge.logger.error(ex);
-        }
+//        try {
+//            if (!UserCredentials.changeUsername(sge, username, password, passwordConfirm)) {
+//                fieldPassword.setText("");
+//                SGENotifier.displayError(this, "Error", "Password is not correct");
+//            }
+//        } catch (IOException ex) {
+//            SGENotifier.displayError(this, "Error", "Error changing user", ex);
+//            sge.logger.error(ex);
+//        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     protected boolean requireElevatedAccess() {
-        UserCredentials elevatedUser = UserCredentialsDialog.requestUser(this);
-
-        try {
-            elevatedUser.loadPermissions();
-        } catch (IOException ex) {
-            SGENotifier.displayError(this, "Error", "Error loading permissions for elevated access");
-            return false;
-        }
-
-        return elevatedUser.hasPermission("users.modify") || elevatedUser.hasPermission("administrator");
+//        UserCredentials elevatedUser = UserCredentialsDialog.requestUser(this);
+//
+//        try {
+//            elevatedUser.loadPermissions();
+//        } catch (IOException ex) {
+//            SGENotifier.displayError(this, "Error", "Error loading permissions for elevated access");
+//            return false;
+//        }
+//
+//        return elevatedUser.hasPermission("users.modify") || elevatedUser.hasPermission("administrator");
+        return false;
     }
 
     private void buttonGivePermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGivePermActionPerformed
@@ -205,10 +199,6 @@ public class UsersPanel extends javax.swing.JPanel {
             SGENotifier.displayError(this, "Error de acceso", "No puedes realizar esta accion");
         }
     }//GEN-LAST:event_buttonNegatePermActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        sge.setUser(UserCredentialsDialog.requestUser(this));
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     public synchronized void changeUser() {
         fieldUsername.setText(sge.getUser().getUsername());

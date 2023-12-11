@@ -1,8 +1,10 @@
 package dev.amrv.sge.window;
 
-import dev.amrv.sge.auth.UserCredentials;
 import java.awt.Component;
+import java.io.File;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,13 +28,32 @@ public class SGENotifier {
         return dialog.wasAccepted();
     }
 
-    public static boolean elevatedAccess(Component parent, String... permissions) {
-        UserCredentials elevatedAccessUser = UserCredentialsDialog.requestUser(parent);
+    public static File requestFileSaveDirectory(Component parent, String title, File originalPath) {
+        JFileChooser saveChooser = new JFileChooser(originalPath);
+        saveChooser.setDialogTitle(title);
+        saveChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        saveChooser.showSaveDialog(parent);
+        return saveChooser.getSelectedFile();
+    }
 
-        for (String perm : permissions) {
-            if (elevatedAccessUser.hasPermission(perm))
-                return true;
-        }
-        return false;
+    public static File requestFileSave(Component parent, String title, File originalPath) {
+        JFileChooser saveChooser = new JFileChooser(originalPath);
+        saveChooser.setDialogTitle(title);
+        saveChooser.showSaveDialog(parent);
+        return saveChooser.getSelectedFile();
+    }
+
+    public static void informate(Component parent, String title, String message) {
+        JOptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static LoadingDialog progress(Component parent, String title, String message, int max) {
+        return progress(parent, title, message, max, null);
+    }
+
+    public static LoadingDialog progress(Component parent, String title, String message, int max, Runnable onComplete) {
+        LoadingDialog dialog = new LoadingDialog(parent, title, message, max, onComplete);
+        dialog.setVisible(true);
+        return dialog;
     }
 }

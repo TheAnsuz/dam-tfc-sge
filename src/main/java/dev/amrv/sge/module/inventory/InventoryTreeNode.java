@@ -59,6 +59,7 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
     }
 
     public void reload(Database database) throws SQLException {
+        super.removeAllChildren();
         if (isCategory) {
             reloadCategories(database);
 
@@ -70,7 +71,7 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
         }
     }
 
-    private void reloadCategories(Database database) throws SQLException {
+    protected void reloadCategories(Database database) throws SQLException {
         category:
         for (InventoryCategory category : getAsCategory().getSubcategories(database)) {
 
@@ -89,7 +90,7 @@ public class InventoryTreeNode extends DefaultMutableTreeNode implements Compara
         }
     }
 
-    private void reloadProducts(Database database) throws SQLException {
+    protected void reloadProducts(Database database) throws SQLException {
         product:
         for (InventoryProduct product : InventoryProduct.getProductsInCategory(database, getAsCategory())) {
 

@@ -3,8 +3,6 @@ package dev.amrv.sge.window;
 import dev.amrv.sge.auth.UserCredentials;
 import dev.amrv.sge.io.ImageLoader;
 import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.EventQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JRootPane;
@@ -22,10 +20,10 @@ public class UserCredentialsDialog extends JDialog {
     private static final ImageIcon VISIBLE = ImageLoader.getResouceIconSafe("assets/yes-visible.png", ICON_SIZE, ICON_SIZE);
     private static final ImageIcon INVISIBLE = ImageLoader.getResouceIconSafe("assets/not-visible.png", ICON_SIZE, ICON_SIZE);
 
-    public static UserCredentials requestUser(Component parent) {
+    private static UserCredentials requestUser(Component parent) {
         final UserCredentialsDialog dialog = new UserCredentialsDialog(parent);
         dialog.setVisible(true);
-        return dialog.generateCredentials();
+        return null;
     }
 
     private boolean canceled = true;
@@ -42,22 +40,20 @@ public class UserCredentialsDialog extends JDialog {
     }
 
     public void setUsername(String username) {
-        jTextField1.setText(username);
+        inputUsername.setText(username);
         keepUser = !username.trim().isEmpty();
     }
-
-    private boolean passwordVisible = false;
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jLabelImage = new javax.swing.JLabel();
+        inputPassword = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        inputShowPassword = new javax.swing.JCheckBox();
+        inputUsername = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Iniciar sesion");
@@ -74,16 +70,6 @@ public class UserCredentialsDialog extends JDialog {
 
         jLabel2.setText("Clave de usuario");
 
-        jLabelImage.setIcon(INVISIBLE);
-        jLabelImage.setToolTipText("Visibilidad de clave");
-        jLabelImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabelImage.setIconTextGap(0);
-        jLabelImage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jLabelImageMouseReleased(evt);
-            }
-        });
-
         jButton1.setText("Iniciar sesion");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,21 +77,32 @@ public class UserCredentialsDialog extends JDialog {
             }
         });
 
+        inputShowPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputShowPasswordActionPerformed(evt);
+            }
+        });
+
+        inputUsername.setText("jTextField2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jButton1)
+                    .addComponent(inputUsername)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                        .addComponent(inputPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputShowPassword))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jButton1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -114,13 +111,13 @@ public class UserCredentialsDialog extends JDialog {
                 .addGap(24, 24, 24)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(inputUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputShowPassword))
                 .addGap(34, 34, 34)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -131,30 +128,21 @@ public class UserCredentialsDialog extends JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     @Override
     public void setVisible(boolean b) {
         setPasswordVisible(false);
-
-        if (keepUser)
-            jTextField1.setFocusable(false);
-
         super.setVisible(b);
-
-        jTextField1.setFocusable(true);
         keepUser = false;
     }
 
-    public UserCredentials generateCredentials() {
-//        if (jTextField1.getText().trim().isEmpty())
-//            return UserCredentials.anonymous();
-
-        return UserCredentials.getUserCredentials(jTextField1.getText(), new String(jPasswordField1.getPassword()));
+    public UserCredentials getCredentials() {
+        return UserCredentials.tryGetUser(inputUsername.getText(), new String(inputPassword.getPassword()));
     }
 
-    private void jLabelImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImageMouseReleased
-        setPasswordVisible(!passwordVisible);
-    }//GEN-LAST:event_jLabelImageMouseReleased
+    public String getUsername() {
+        return inputUsername.getText();
+    }
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         super.setVisible(false);
@@ -166,24 +154,24 @@ public class UserCredentialsDialog extends JDialog {
         super.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void inputShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputShowPasswordActionPerformed
+        setPasswordVisible(inputShowPassword.isSelected());
+    }//GEN-LAST:event_inputShowPasswordActionPerformed
+
     public void setPasswordVisible(boolean visible) {
         if (visible) {
-            passwordVisible = true;
-            jPasswordField1.setEchoChar(PASSWORD_VISIBLE);
-            jLabelImage.setIcon(VISIBLE);
+            inputPassword.setEchoChar(PASSWORD_VISIBLE);
         } else {
-            passwordVisible = false;
-            jPasswordField1.setEchoChar(PASSWORD_INVISIBLE);
-            jLabelImage.setIcon(INVISIBLE);
+            inputPassword.setEchoChar(PASSWORD_INVISIBLE);
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPasswordField inputPassword;
+    private javax.swing.JCheckBox inputShowPassword;
+    private javax.swing.JTextField inputUsername;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabelImage;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

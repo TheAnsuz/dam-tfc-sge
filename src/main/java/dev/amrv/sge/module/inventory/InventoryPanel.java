@@ -3,11 +3,16 @@
 package dev.amrv.sge.module.inventory;
 
 import dev.amrv.sge.SGE;
+import dev.amrv.sge.SGEFileSystem;
+import dev.amrv.sge.io.CSVWriter;
+import dev.amrv.sge.module.providers.Provider;
 import dev.amrv.sge.window.SGENotifier;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
@@ -18,6 +23,8 @@ import javax.swing.event.PopupMenuListener;
  * @author Adrian Martin Ruiz del Valle Aka. Ansuz
  */
 public final class InventoryPanel extends javax.swing.JPanel implements PopupMenuListener {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
 
     private final InventoryTreeModel treeModel;
     private final SGE sge;
@@ -80,6 +87,7 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         menuModify = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
+        buttonExport = new javax.swing.JButton();
 
         menuCreateCategory.setText("Crear categoria");
         menuCreateCategory.addActionListener(new java.awt.event.ActionListener() {
@@ -123,15 +131,30 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         jTree1.setShowsRootHandles(true);
         jScrollPane1.setViewportView(jTree1);
 
+        buttonExport.setText("Exportar");
+        buttonExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(buttonExport)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonExport)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -274,8 +297,56 @@ public final class InventoryPanel extends javax.swing.JPanel implements PopupMen
         }
     }//GEN-LAST:event_menuModifyActionPerformed
 
+    private void buttonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExportActionPerformed
+        String directoryPath = sge.getProperties().getProperty("inventory.exportDirectory", SGEFileSystem.getSource().getAbsolutePath());
+
+        File dir = SGENotifier.requestFileSaveDirectory(this,"Selecciona una carpeta en la que guardar la exportacion", new File(directoryPath));
+
+        if (dir == null)
+            return;
+
+        sge.getProperties().setProperty("inventory.exportDirectory", dir.getAbsolutePath());
+
+        final String fileName = "inventory_" + LocalDateTime.now().format(FORMATTER) + ".csv";
+        final File exportFile = new File(dir, fileName);
+        try (CSVWriter writer = new CSVWriter(exportFile)) {
+            writer.addLine("CATEGORIA", "PROVEDOR", "PRODUCT", "ATRIBUTOS", "CANTIDAD");
+
+            for (InventoryProduct product : InventoryProduct.getAll(sge.getDatabase())) {
+                writer.add(InventoryCategory.get(sge.getDatabase(), product.getCategoryID()).getName());
+                writer.add(Provider.get(sge.getDatabase(), product.getProviderID()).getName());
+                writer.add(product.getName());
+
+                StringBuilder attributeString = new StringBuilder();
+                Collection<InventoryAttribute> attributes = InventoryAttribute.getAll(sge.getDatabase(), product).values();
+
+                for (InventoryAttribute attribute : attributes) {
+                    attributeString.append(attribute.getKey()).append("=").append(attribute.getValue()).append(",");
+                }
+                if (!attributes.isEmpty())
+                    attributeString.deleteCharAt(attributeString.length() - 1).deleteCharAt(attributeString.length() - 1);
+
+                writer.add(attributeString.toString());
+                writer.add(product.getAmount() + "");
+                writer.nextLine();
+            }
+
+        } catch (IOException ex) {
+            SGENotifier.displayError(this, "Error exportando datos", "No se ha podido exportar el inventario", ex);
+            return;
+        } catch (SQLException ex) {
+            SGENotifier.displayError(this, "Error exportando datos", "No se ha podido cargar el inventario", ex);
+            return;
+        } catch (Exception e) {
+            SGENotifier.displayError(this, "Error exportando datos", "Error del sistema exportando datos", e);
+            return;
+        }
+        SGENotifier.informate(this, "Inventario", "Se ha exportado el inventario actual al fichero:\n" + exportFile.getAbsolutePath());
+    }//GEN-LAST:event_buttonExportActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonExport;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTree jTree1;
     private javax.swing.JMenuItem menuCreateCategory;

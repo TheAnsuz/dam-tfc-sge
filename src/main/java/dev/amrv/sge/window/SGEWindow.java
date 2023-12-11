@@ -9,6 +9,7 @@ import dev.amrv.sge.window.component.ModuleButton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.Enumeration;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -63,8 +64,8 @@ public class SGEWindow extends javax.swing.JFrame {
 
         while (buttonEnum.hasMoreElements()) {
             ModuleButton button = (ModuleButton) buttonEnum.nextElement();
-
-            button.setEnabled(event.getNewUser().hasPermission(button.getModule().requirePermission()));
+            String permission = button.getModule().requirePermission();
+            button.setEnabled(event.getNewUser().hasPermission(permission));
         }
 
         super.setTitle("SGE: " + event.getNewUser().getUsername());
@@ -85,7 +86,8 @@ public class SGEWindow extends javax.swing.JFrame {
             moduleButtons.clearSelection();
         });
 
-        button.setEnabled(sge.getUser().hasPermission(button.getModule().requirePermission()));
+        String permission = button.getModule().requirePermission();
+        button.setEnabled(sge.getUser().hasPermission(permission));
         panelModuleSelector.add(button, BorderLayout.CENTER);
     }
 

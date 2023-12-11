@@ -35,6 +35,18 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
     private static final String QUERY_GET_PRODUCTS_IN_CATEGORY = "SELECT * FROM INVENTORY.PRODUCT WHERE "
             + "CATEGORY = {0}";
 
+    public static List<InventoryProduct> getAll(Database database) throws SQLException {
+        List<InventoryProduct> products = new ArrayList<>();
+        
+        ResultSet set = database.execute("SELECT * FROM INVENTORY.PRODUCT").getSet();
+        
+        while (set.next()) {
+            products.add(new InventoryProduct(set.getInt(1), set.getString(3), set.getInt(5), set.getInt(2), set.getInt(4)));
+        }
+        
+        return products;
+    }
+
     public static List<InventoryProduct> getProductsInCategory(Database database, InventoryCategory category) throws SQLException {
         return getProductsInCategory(database, category.getID());
     }
@@ -149,7 +161,7 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
         this.amount = amount;
     }
 
-    public void ChangeAmount(int amount) {
+    public void changeAmount(int amount) {
         this.amount += amount;
     }
 
@@ -210,7 +222,6 @@ public class InventoryProduct implements Comparable<InventoryProduct> {
         );
         final ResultSet set = result.getSet();
         set.next();
-        database.commit();
 
         name = set.getString(3);
         categoryId = set.getInt(2);

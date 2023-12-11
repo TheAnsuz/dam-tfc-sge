@@ -60,8 +60,14 @@ public final class StrictTextField extends JTextField {
         return validInput;
     }
 
+    @Override
+    public void setText(String t) {
+        super.setText(t);
+        validateInput();
+    }
+
     protected synchronized void validateInput() {
-        if (validator.test(super.getText())) {
+        if (validator == null || validator.test(super.getText())) {
             // Valid input
             validInput = true;
             super.setForeground(normalColor);

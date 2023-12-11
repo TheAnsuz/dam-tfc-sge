@@ -56,6 +56,17 @@ public class InventoryAttribute {
         return attribute;
     }
 
+    public static InventoryAttribute getOrCreate(Database database, InventoryProduct product, String key) throws SQLException {
+        return getOrCreate(database, product.getID(), key);
+    }
+
+    public static InventoryAttribute getOrCreate(Database database, int productID, String key) throws SQLException {
+        InventoryAttribute existing = get(database, productID, key);
+        if (existing == null)
+            return create(database, productID, key, "");
+        return existing;
+    }
+
     public static InventoryAttribute create(Database database, InventoryProduct product, String key, String value) throws SQLException {
         final InventoryAttribute attribute = new InventoryAttribute(-1, product.getID(), key, value);
         attribute.commit(database);
@@ -185,4 +196,10 @@ public class InventoryAttribute {
         final InventoryAttribute other = (InventoryAttribute) obj;
         return this.id == other.id;
     }
+
+    @Override
+    public String toString() {
+        return "InventoryAttribute[(" + id + ") " + key + "=" + value + "]";
+    }
+
 }

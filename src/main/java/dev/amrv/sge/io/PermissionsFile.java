@@ -17,11 +17,17 @@ public class PermissionsFile {
 
     private final File file;
     private final List<String> content = new ArrayList<>();
+    private final long cipherSeed;
 
-    public PermissionsFile(File file) {
+    public PermissionsFile(File file, long cipherSeed) {
         this.file = file;
+        this.cipherSeed = cipherSeed;
     }
 
+    public boolean isValid() {
+        return file.exists();
+    }
+    
     public File getFile() {
         return file;
     }
@@ -77,7 +83,7 @@ public class PermissionsFile {
         int i = 0;
 
         for (char c : line.toCharArray())
-            result += (char)(c + (++i % 4));
+            result += (char) (c + (++i % cipherSeed));
 
         return result;
     }
@@ -88,7 +94,7 @@ public class PermissionsFile {
         int i = 0;
 
         for (char c : line.toCharArray())
-            result += (char)(c - (++i % 4));
+            result += (char) (c - (++i % cipherSeed));
 
         return result;
     }

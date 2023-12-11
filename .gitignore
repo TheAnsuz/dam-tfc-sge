@@ -25,6 +25,7 @@ replay_pid*
 /target/
 
 # Application instance data
+/facturas/
 /database/
 /bbdd/
 /bbdd_test/

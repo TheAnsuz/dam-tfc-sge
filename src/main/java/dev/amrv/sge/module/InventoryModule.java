@@ -3,12 +3,8 @@ package dev.amrv.sge.module;
 import dev.amrv.sge.SGE;
 import dev.amrv.sge.bbdd.Database;
 import dev.amrv.sge.bbdd.DatabaseErrors;
-import dev.amrv.sge.module.inventory.InventoryCategory;
 import dev.amrv.sge.module.inventory.InventoryPanel;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
@@ -85,7 +81,8 @@ public class InventoryModule extends Module {
                     + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
                     + "PRODUCT INT NOT NULL CONSTRAINT PRODUCT_FK REFERENCES INVENTORY.PRODUCT(ID) ON DELETE CASCADE,"
                     + "NAME VARCHAR(24) NOT NULL,"
-                    + "VALUE VARCHAR(48)"
+                    + "VALUE VARCHAR(48),"
+                    + "CONSTRAINT UNIQUE_PRODUCT_ATTRIBUTE UNIQUE (PRODUCT,NAME)"
                     + ")");
             database.commit();
         } catch (SQLException ex) {

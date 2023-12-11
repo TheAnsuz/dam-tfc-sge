@@ -339,7 +339,9 @@ public class CreateProductWindow extends javax.swing.JDialog {
 
         try {
             for (AttributeTuple attributes : tableModel.getAll()) {
-                InventoryAttribute.create(sge.getDatabase(), actualProduct, attributes.getKey(), attributes.getValue());
+                InventoryAttribute attr = InventoryAttribute.getOrCreate(sge.getDatabase(), actualProduct, attributes.getKey());
+                attr.setValue(attributes.getValue());
+                attr.commit(sge.getDatabase());
             }
         } catch (SQLException ex) {
             sge.logger.error("No se han podido guardar los cambios del atributo en el producto {0}::{1}", actualProduct.getName(), actualProduct.getID());

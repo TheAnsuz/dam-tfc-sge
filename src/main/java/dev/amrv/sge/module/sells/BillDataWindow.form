@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[473, 579]"/>
+    </Property>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="labelEmitterStreet" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputEmitterStreet" alignment="0" min="-2" pref="182" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="labelEmitterProvince" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="inputEmitterProvince" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="inputEmitterPostalCode" min="-2" pref="86" max="-2" attributes="0"/>
+                                  <Component id="labelEmitterPostalCode" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="labelBill" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jSeparator2" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="inputBillID" min="-2" pref="102" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="inputTimestamp" min="-2" pref="168" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="labelEmitter" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jSeparator1" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="labelReceiver" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jSeparator3" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelReceiverName" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputReceiverName" min="-2" pref="196" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelReceiverPhone" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputReceiverPhone" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="labelReceiverMail" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="inputReceiverMail" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="inputReceiverStreet" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="labelReceiverStreet" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="166" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelReceiverProvince" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputReceiverProvince" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelReceiverPostalCode" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputReceiverPostalCode" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelReceiverCIF" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputReceiverCIF" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="inputEmitterPhone" min="-2" pref="84" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelEmitterMail" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputEmitterMail" min="-2" pref="174" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="labelPaymentMethod" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="inputPaymentMethod" min="-2" pref="117" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="inputEmitterName" alignment="0" min="-2" pref="185" max="-2" attributes="0"/>
+                                  <Component id="labelEmitterName" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelEmitterCompany" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputEmitterCompany" min="-2" pref="136" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelEmitterCIF" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputEmitterCIF" min="-2" pref="101" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="labelEmitterPhone" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="labelReceiverAdditionalInfo" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jSeparator4" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="buttonCreateSimplified" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="buttonCreateNominative" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="labelBill" min="-2" max="-2" attributes="0"/>
+                  <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="inputBillID" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputTimestamp" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelPaymentMethod" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputPaymentMethod" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="labelEmitter" min="-2" max="-2" attributes="0"/>
+                  <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelEmitterName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelEmitterCompany" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelEmitterCIF" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="inputEmitterName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputEmitterCompany" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputEmitterCIF" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelEmitterPhone" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelEmitterMail" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="inputEmitterMail" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputEmitterPhone" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelEmitterStreet" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelEmitterProvince" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelEmitterPostalCode" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="inputEmitterStreet" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputEmitterProvince" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputEmitterPostalCode" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="labelReceiver" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jSeparator3" min="-2" pref="10" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelReceiverName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelReceiverPhone" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelReceiverMail" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="inputReceiverName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputReceiverPhone" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputReceiverMail" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelReceiverStreet" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelReceiverProvince" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelReceiverPostalCode" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelReceiverCIF" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="inputReceiverStreet" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputReceiverProvince" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputReceiverPostalCode" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputReceiverCIF" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="labelReceiverAdditionalInfo" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jSeparator4" min="-2" pref="10" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="129" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="buttonCreateNominative" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="buttonCreateSimplified" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="labelBill">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Factura"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputBillID">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" value="0000000000"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputTimestamp">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" value="dd/MM/yyyy"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitter">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Emisor"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator2">
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Persona"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterName">
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterCompany">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Empresa"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterCompany">
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterStreet">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterProvince">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterStreet">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Calle"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterProvince">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Provincia"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterPostalCode">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="C&#xf3;digo postal"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterPostalCode">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterCIF">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CIF"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterCIF">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterPhone">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Telefono"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterPhone">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputEmitterMail">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelEmitterMail">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Correo"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiver">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Receptor"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator3">
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Nombre"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputReceiverName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputReceiverPhone">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputReceiverMail">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField3"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverPhone">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Telefono"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverMail">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Correo"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverStreet">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Calle"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputReceiverStreet">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputReceiverProvince">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputReceiverPostalCode">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField3"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="inputReceiverCIF">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jTextField4"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverProvince">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Provincia"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverPostalCode">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="C&#xf3;digo postal"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverCIF">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CIF"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelPaymentMethod">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Forma de pago"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="inputPaymentMethod">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="paymentMethodModel" type="code"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelReceiverAdditionalInfo">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Informacion adicional"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="inputDescription">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="buttonCreateNominative">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Crear factura nominativa"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonCreateNominativeActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="buttonCreateSimplified">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Crear factura simplificada"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonCreateSimplifiedActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator4">
+    </Component>
+  </SubComponents>
+</Form>

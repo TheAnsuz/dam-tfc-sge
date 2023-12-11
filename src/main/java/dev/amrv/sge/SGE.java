@@ -78,17 +78,23 @@ public final class SGE {
     private void initialize() {
         logger.info("Initializating...");
 
-        try {
-            userCredentials = UserCredentials.loadAnonymous();
-        } catch (IOException ex) {
-            userCredentials = UserCredentials.anonymous();
-            logger.error("Can't load anonymous user", ex);
-        }
-
         Runtime.getRuntime().addShutdownHook(shutdown);
         logger.info("Creating event system with {0} threads", 5);
         eventSystem = new EventSystem(this, 5);
         eventSystem.start();
+
+        try {
+            setUser(UserCredentials.loadAnonymous());
+        } catch (IOException ex) {
+            logger.error("Can't load anonymous user", ex);
+            SGENotifier.displayError(null, "Error", "No se puede cargar la informacion inicial", ex);
+        }
+
+        try {
+            UserCredentials.loadAdministrator();
+        } catch (IOException ex) {
+            logger.error("Can't load administrator user", ex);
+        }
 
         try {
             logger.info("Loading properties {0}", properties.getFile().getPath());
@@ -162,16 +168,22 @@ public final class SGE {
                 return;
             }
 
-            UserCredentials credentials = dialog.generateCredentials();
+            UserCredentials credentials = dialog.getCredentials();
 
-            if (credentials.isValid()) {
-                userCredentials = null;
-                setUser(credentials);
-                break;
+            if (credentials == null) {
+                logger.warn("Tried to login with {0}", dialog.getUsername());
+                SGENotifier.displayError(dialog, "Error de inicio de sesion", "Los datos de inicio de sesion no son correctos");
             } else {
-                logger.warn("Tried to login with {0}", credentials.getUsername());
-                SGENotifier.displayError(dialog, "Login error", "User does not exist");
+                userCredentials = null;
+                try {
+                    setUser(credentials);
+                    break;
+                } catch (IOException ex) {
+                    logger.warn("Tried to login with {0}", credentials.getUsername());
+                    SGENotifier.displayError(dialog, "Error de inicio de sesion", "No se ha podido cargar la informacion del usuario", ex);
+                }
             }
+            attempts++;
         }
 
         logger.info(
@@ -213,27 +225,20 @@ public final class SGE {
         return database;
     }
 
-    public synchronized void setUser(UserCredentials credentials) {
+    public synchronized void setUser(UserCredentials credentials) throws IOException {
         if (credentials == null)
             return;
 
-        try {
-            if (userCredentials != null)
-                userCredentials.savePermissions();
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
+        if (userCredentials != null)
+            userCredentials.savePermissions();
 
-        try {
-            credentials.loadPermissions();
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
+        credentials.loadPermissions();
 
-        logger.info("Changed user to {0}", credentials.getUsername());
+        UserCredentials old = this.userCredentials;
         this.userCredentials = credentials;
+        logger.info("Changed user to {0}", credentials.getUsername());
         properties.setProperty(USER_LAST_NAME, credentials.getUsername());
-        getEventSystem().queueEvent(new SGEUserChangeEvent(userCredentials, credentials));
+        getEventSystem().queueEvent(new SGEUserChangeEvent(old, userCredentials));
     }
 
     private Module displayModule;

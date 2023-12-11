@@ -3,6 +3,7 @@ package dev.amrv.sge.auth;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map.Entry;
 import javax.crypto.NoSuchPaddingException;
 
 /**
@@ -12,33 +13,23 @@ import javax.crypto.NoSuchPaddingException;
 public class AuthTest {
 
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException {
-        String username = "administrador";
-        String password = "administrador";
+        UserCredentials credentials = UserCredentials.loadAdministrator();
 
-        UserCredentials credentials = UserCredentials.createUser(username, password);
-
-//        UserCredentials credentials = new UserCredentials(username, password) {
-//            @Override
-//            public void loadPermissions() throws IOException {
-//                System.out.println(file.getFile());
-//                super.loadPermissions();
-//            }
-//
-//        };
         System.out.println(credentials.getUsername());
-        System.out.println(credentials.getPasswordHash());
+//        System.out.println(credentials.getPasswordHash());
 
         //credentials.loadPermissions();
         PermissionRoot perm = credentials.getPermissions();
 
-        perm.setPermission("*", true);
+        for (Entry<String,Boolean> permission : perm.getPermissions().entrySet())
+            System.out.println(permission.getKey() + ": " + permission.getValue());
+        //perm.setPermission("*", true);
 
         System.out.println(credentials.hasPermission("test.subperm.deeper"));
         System.out.println(credentials.hasPermission("test"));
-        System.out.println(credentials.hasPermission("test.subperm.explicit"));
+        System.out.println(credentials.hasPermission("configuration.see"));
 
-        credentials.savePermissions();
-
+        //credentials.savePermissions();
     }
 
 }

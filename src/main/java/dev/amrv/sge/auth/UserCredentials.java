@@ -1,10 +1,8 @@
 package dev.amrv.sge.auth;
 
-import dev.amrv.sge.SGE;
 import dev.amrv.sge.SGEFileSystem;
 import dev.amrv.sge.io.PermissionsFile;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map.Entry;
 
 /**
@@ -13,69 +11,51 @@ import java.util.Map.Entry;
  */
 public final class UserCredentials {
 
-    private static final UserCredentials anonymous = new UserCredentials("anonymous", "anonymous");
+    private static final UserCredentials anonymous = new UserCredentials("anonymous", "anonymous", null, 0);
 
-    public synchronized static boolean changeUsername(SGE sge, String newUsername, String newPassword, String password) throws IOException {
-        if (!sge.getUser().getPasswordHash().equals(sge.getUser().callDigest(password)))
-            return false;
-
-        final UserCredentials newCredentials = new UserCredentials(newUsername, newPassword, sge.getUser().permissions);
-
-        newCredentials.file.save();
-        sge.getUser().file.getFile().delete();
-        sge.getUser().file.getFile().deleteOnExit();
-
-        sge.setUser(newCredentials);
-        return true;
+    public static UserCredentials loadAnonymous() throws IOException {
+        anonymous.savePermissions();
+        return anonymous;
     }
 
-    public static UserCredentials createUser(String username, String password) throws IOException {
-        UserCredentials credentials = new UserCredentials(username, password);
+    private static final UserCredentials administrator = new UserCredentials("administrador", "administrador", null, 0);
 
-        credentials.savePermissions();
-
-        if (!credentials.isValid())
-            return anonymous();
-
-        return credentials;
-    }
-
-    public static UserCredentials getUserCredentials(String username, String password) {
-        return new UserCredentials(username, password);
+    public static UserCredentials loadAdministrator() throws IOException {
+        administrator.getPermissions().setPermission("*", true);
+        administrator.savePermissions();
+        return administrator;
     }
 
     private final PermissionRoot permissions;
     private final String username;
-    private final String password;
+    private final String credentialsHash;
     protected final PermissionsFile file;
 
-    private UserCredentials(String username, String password) {
-        this(username, password, null);
+    public static UserCredentials tryGetUser(String name, String password) {
+        UserCredentials mentioned = new UserCredentials(name, password, null, 0);
+
+        // Si no existe el usuario
+        if (!mentioned.file.isValid())
+            return null;
+
+        return mentioned;
     }
 
-    private UserCredentials(String username, String password, PermissionRoot permissions) {
+    public static UserCredentials createUser(String username, String password) throws IOException {
+        UserCredentials mentioned = new UserCredentials(username, password, null, 0);
+        mentioned.savePermissions();
+        return mentioned;
+    }
+
+    private UserCredentials(String username, String password, PermissionRoot permissions, long cipher) {
         this.username = username;
-//        System.out.println("USER: " + username + " -- " + password);
-        this.password = callDigest(password);
+        this.credentialsHash = ((password.hashCode() >> 2) + username.hashCode()) + "";
         this.permissions = permissions == null ? new PermissionRoot() : permissions;
-        this.file = new PermissionsFile(SGEFileSystem.getSourceFile("user", getFilename()));
-//        System.out.println("FILE: " + this.file.getFile().getName());
-    }
 
-    protected String getFilename() {
-        return callDigest(username);
-    }
+        if (cipher == 0)
+            cipher = password.hashCode();
 
-    public boolean isValid() {
-        return file.getFile().isFile();
-    }
-
-    private String callDigest(String password) {
-        return digest(password.getBytes());
-    }
-
-    protected String digest(byte[] bytes) {
-        return String.valueOf(Arrays.hashCode(bytes) * (long) Arrays.hashCode(bytes));
+        this.file = new PermissionsFile(SGEFileSystem.getSourceFile("user", credentialsHash), cipher);
     }
 
     public void loadPermissions() throws IOException {
@@ -83,7 +63,8 @@ public final class UserCredentials {
 
         for (String line : file.content()) {
             if (line.startsWith("@")) {
-                // Header
+                // Metadata
+
             } else {
                 if (line.startsWith("!"))
                     // Revoke permission
@@ -110,25 +91,11 @@ public final class UserCredentials {
         return username;
     }
 
-    public String getPasswordHash() {
-        return password;
-    }
-
     public PermissionRoot getPermissions() {
         return permissions;
     }
 
     public boolean hasPermission(String permission) {
         return permissions.hasPermission(permission);
-    }
-
-    public static UserCredentials loadAnonymous() throws IOException {
-        anonymous.file.read();
-
-        return anonymous;
-    }
-
-    public static UserCredentials anonymous() {
-        return anonymous;
     }
 }

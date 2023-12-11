@@ -50,7 +50,7 @@ public final class PermissionRoot {
         permissions.put(permission.trim(), value);
     }
 
-    Map<String, Boolean> getPermissions() {
+    public Map<String, Boolean> getPermissions() {
         return permissions;
     }
 }
