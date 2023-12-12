@@ -13,6 +13,7 @@ import dev.amrv.sge.event.impl.SGESetupEvent;
 import dev.amrv.sge.event.impl.SGEUserChangeEvent;
 import dev.amrv.sge.io.PropertiesFile;
 import dev.amrv.sge.module.Module;
+import dev.amrv.sge.window.LoadingDialog;
 import dev.amrv.sge.window.SGENotifier;
 import dev.amrv.sge.window.SGEWindow;
 import dev.amrv.sge.window.UserCredentialsDialog;
@@ -76,13 +77,16 @@ public final class SGE {
     }
 
     private void initialize() {
+        LoadingDialog loading = SGENotifier.progress(null, "SGE", "Se esta iniciando la aplicacion", 7);
         logger.info("Initializating...");
 
+        loading.increase();
         Runtime.getRuntime().addShutdownHook(shutdown);
         logger.info("Creating event system with {0} threads", 5);
         eventSystem = new EventSystem(this, 5);
         eventSystem.start();
 
+        loading.increase();
         try {
             setUser(UserCredentials.loadAnonymous());
         } catch (IOException ex) {
@@ -90,12 +94,14 @@ public final class SGE {
             SGENotifier.displayError(null, "Error", "No se puede cargar la informacion inicial", ex);
         }
 
+        loading.increase();
         try {
             UserCredentials.loadAdministrator();
         } catch (IOException ex) {
             logger.error("Can't load administrator user", ex);
         }
 
+        loading.increase();
         try {
             logger.info("Loading properties {0}", properties.getFile().getPath());
             this.properties.read();
@@ -103,6 +109,7 @@ public final class SGE {
             logger.error(ex);
         }
 
+        loading.increase();
         logger.info("Initializating database...");
         try {
             database = new Database("bbdd");
@@ -111,17 +118,21 @@ public final class SGE {
             System.exit(1);
         }
 
+        loading.increase();
         logger.info("Initializating window...");
         window = new SGEWindow(this);
 
         getEventSystem().queueEvent(new SGEInitializeEvent(this));
         logger.info("Finished initializating");
+        loading.increase();
         setup.start();
     }
 
     private void setup() {
+        LoadingDialog loading = SGENotifier.progress(null, "SGE", "Se esta cargando la aplicacion", 10);
         logger.info("Setting up...");
 
+        loading.increase(); // 1
         logger.info("Loading look and feels");
         FlatLightLaf light = new FlatLightLaf();
         FlatDarkLaf dark = new FlatDarkLaf();
@@ -129,10 +140,12 @@ public final class SGE {
         UIManager.installLookAndFeel(light.getName(), light.getClass().getCanonicalName());
         UIManager.installLookAndFeel(dark.getName(), dark.getClass().getCanonicalName());
 
-        String lafName = properties.getProperty("sge.window.lookAndFeel","");
+        loading.increase(); // 2
+        String lafName = properties.getProperty("sge.window.lookAndFeel", "");
 
         LookAndFeelInfo toChange = null;
         int index = 0;
+        loading.increase(); // 3
         for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
             logger.debug("Registered laf {0} with index {1}", laf.getName(), index);
 
@@ -142,20 +155,24 @@ public final class SGE {
         }
 
         logger.info("Found {0} look and feels", UIManager.getInstalledLookAndFeels().length);
-
+        
+        loading.increase(); // 4
         try {
             setLookAndFeel(toChange);
         } catch (Exception ex) {
             logger.error(ex);
         }
 
+        loading.increase(); // 5
         getEventSystem().queueEvent(new SGESetupEvent(this));
         logger.info("Finished setting up");
 
+        loading.increase(); // 6
         String lastUsername = properties.getProperty(USER_LAST_NAME, "");
 
         int attempts = 1;
 
+        loading.increase(); // 7
         while (true) {
             logger.info("Logging attempt {0}", attempts);
             UserCredentialsDialog dialog = new UserCredentialsDialog(null);
@@ -186,6 +203,7 @@ public final class SGE {
             attempts++;
         }
 
+        loading.increase(); // 8
         logger.info(
                 "Loading modules...");
         for (Module module : modules) {
@@ -199,9 +217,12 @@ public final class SGE {
 
         logger.info("Opening UI");
 
+        loading.increase(); // 9
         window.setTitle(getUser().getUsername());
         window.setVisible(
                 true);
+        
+        loading.increase(); // 10
     }
 
     public void setLookAndFeel(LookAndFeelInfo info) throws Exception {
