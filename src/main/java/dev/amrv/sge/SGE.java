@@ -129,7 +129,7 @@ public final class SGE {
         UIManager.installLookAndFeel(light.getName(), light.getClass().getCanonicalName());
         UIManager.installLookAndFeel(dark.getName(), dark.getClass().getCanonicalName());
 
-        String lafName = properties.getProperty("sge.window.lookAndFeel");
+        String lafName = properties.getProperty("sge.window.lookAndFeel","");
 
         LookAndFeelInfo toChange = null;
         int index = 0;

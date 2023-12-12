@@ -9,7 +9,6 @@ import dev.amrv.sge.window.component.ModuleButton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.Enumeration;
-import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -52,7 +51,7 @@ public class SGEWindow extends javax.swing.JFrame {
 
     private double getVariable(String key, double defaultValue) {
         try {
-            return Double.parseDouble(sge.getProperties().getProperty(key));
+            return Double.parseDouble(sge.getProperties().getProperty(key, ""));
         } catch (NumberFormatException nfe) {
             sge.logger.warn("Can't get integer for property {0} {1}", key, nfe);
         }

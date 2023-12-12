@@ -76,6 +76,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
+                            <classpathPrefix>libs/</classpathPrefix>
                             <mainClass>dev.amrv.sge.SGELauncher</mainClass>
                         </manifest>
                     </archive>
